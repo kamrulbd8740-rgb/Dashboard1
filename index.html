@@ -1,764 +1,86 @@
-
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --b:#007AFF;--g:#34C759;--r:#FF3B30;--o:#FF9500;--p:#AF52DE;
-  --t:#32ADE6;--i:#5856D6;--pk:#FF2D55;--gr:#8E8E93;
-  --bg:#F2F2F7;--card:#FFFFFF;--card2:#F9F9FB;
-  --lbl:rgba(0,0,0,.85);--lbl2:rgba(60,60,67,.6);--lbl3:rgba(60,60,67,.3);
-  --sep:rgba(60,60,67,.13);--fill:rgba(120,120,128,.08);
-  --r14:14px;--r10:10px;--pill:100px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PathLab Pro — Employee Pathology Benefit System</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.8.0/Recharts.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; margin: 0; }
+    * { box-sizing: border-box; }
+    /* Extended Tailwind colours used dynamically */
+    .bg-rose-50{background:#fff1f2}.text-rose-700{color:#be123c}.border-rose-200{border-color:#fecdd3}
+    .bg-blue-50{background:#eff6ff}.text-blue-600{color:#2563eb}.text-blue-700{color:#1d4ed8}.border-blue-200{border-color:#bfdbfe}
+    .bg-emerald-50{background:#ecfdf5}.text-emerald-600{color:#059669}.text-emerald-700{color:#047857}.border-emerald-200{border-color:#a7f3d0}.bg-emerald-500{background:#10b981}.bg-emerald-600{background:#059669}.hover\:bg-emerald-700:hover{background:#047857}
+    .bg-amber-50{background:#fffbeb}.text-amber-500{color:#f59e0b}.text-amber-600{color:#d97706}.text-amber-700{color:#b45309}.border-amber-200{border-color:#fde68a}.bg-amber-500{background:#f59e0b}.hover\:bg-amber-600:hover{background:#d97706}
+    .bg-violet-50{background:#f5f3ff}.text-violet-600{color:#7c3aed}.text-violet-700{color:#6d28d9}.border-violet-200{border-color:#ddd6fe}
+    .bg-teal-50{background:#f0fdfa}.text-teal-600{color:#0d9488}.border-teal-200{border-color:#99f6e4}
+    .bg-orange-50{background:#fff7ed}.text-orange-600{color:#ea580c}.border-orange-200{border-color:#fed7aa}
+    .bg-red-50{background:#fef2f2}.text-red-500{color:#ef4444}.text-red-600{color:#dc2626}.text-red-700{color:#b91c1c}.border-red-200{border-color:#fecaca}.bg-red-600{background:#dc2626}.hover\:bg-red-700:hover{background:#b91c1c}
+    .bg-slate-900{background:#0f172a}.hover\:bg-slate-800:hover{background:#1e293b}.bg-slate-300{background:#cbd5e1}
+    .bg-slate-700{background:#334155}.text-slate-900{color:#0f172a}
+    .accent-slate-900{accent-color:#0f172a}
+    .focus\:ring-slate-900:focus{--tw-ring-color:#0f172a}
+    .from-slate-900{--tw-gradient-from:#0f172a}.to-slate-700{--tw-gradient-to:#334155}
+    .from-slate-50{--tw-gradient-from:#f8fafc}.to-blue-50{--tw-gradient-to:#eff6ff}
+    .bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-from),var(--tw-gradient-to))}
+    .bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-from),var(--tw-gradient-to))}
+    .from-slate-50.to-violet-50{background:linear-gradient(135deg,#f8fafc,#f5f3ff)}
+    .from-slate-50.to-blue-50{background:linear-gradient(135deg,#f8fafc,#eff6ff)}
+    input[type=checkbox]{accent-color:#0f172a}
+    @media print{
+      body>*{display:none!important}
+      #__sp__{display:block!important;position:static!important;overflow:visible!important}
+      #__sp_toolbar__{display:none!important}
+      #__sp_body__{padding:0!important;background:none!important}
+      .sp-page{box-shadow:none!important;border-radius:0!important;width:100%!important;padding:0!important}
+      @page{size:A4;margin:15mm}
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    // Shim lucide-react icons as simple SVG spans
+    window.lucideReact = new Proxy({}, {
+      get(_, name) {
+        return function Icon({ className = 'w-4 h-4' }) {
+          return React.createElement('span', { className, style: { display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:'0.75em',opacity:0.7 } }, '◆');
+        };
+      }
+    });
+  </script>
+  <script type="text/babel" data-presets="react">
+   {
+  "version": 2,
+  "builds": [{ "src": "index.html", "use": "@vercel/static" }],
+  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
 }
-body{background:var(--bg);color:var(--lbl);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;}
-.shell{display:flex;min-height:100vh;}
-.nav{width:214px;flex-shrink:0;background:rgba(255,255,255,.88);border-right:0.5px solid var(--sep);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
-.nav::-webkit-scrollbar{width:4px;}.nav::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px;}
-.nav-brand{padding:13px 12px 10px;border-bottom:0.5px solid var(--sep);display:flex;align-items:center;gap:8px;}
-.nav-icon{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.nav-t1{font-size:12px;font-weight:700;color:var(--lbl);letter-spacing:-.2px;}
-.nav-t2{font-size:10px;color:var(--lbl2);margin-top:1px;}
-.nav-sec{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--lbl3);padding:11px 12px 4px;}
-.nb{display:flex;align-items:center;gap:7px;padding:7px 9px;cursor:pointer;border-radius:9px;margin:1px 5px;border:none;background:transparent;width:calc(100% - 10px);text-align:left;transition:all .15s;font-family:inherit;}
-.nb:hover{background:rgba(0,0,0,.05);}
-.nb.active{background:rgba(0,122,255,.1);border:0.5px solid rgba(0,122,255,.2);}
-.nb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.nb-lbl{font-size:10px;font-weight:500;color:var(--lbl2);line-height:1.3;}
-.nb.active .nb-lbl{color:var(--b);font-weight:600;}
-.nb-sub{padding-left:22px;}
-.nb-sub .nb-lbl{font-size:9.5px;}
-.main{flex:1;padding:14px;overflow-x:hidden;min-width:0;}
-.db{display:flex;flex-direction:column;gap:11px;}
-.hdr{background:var(--card);border-radius:var(--r14);padding:16px 22px;display:flex;align-items:center;justify-content:center;gap:18px;border:0.5px solid var(--sep);box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.logo-img{width:68px;height:68px;object-fit:contain;border-radius:13px;flex-shrink:0;}
-.logo-fb{display:none;width:68px;height:68px;border-radius:13px;background:linear-gradient(135deg,#FF3B30,#FF9500,#34C759,#007AFF);align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
-.hdv{width:0.5px;height:50px;background:var(--sep);}
-.hdr-org{font-size:10px;font-weight:700;color:var(--b);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
-.hdr-title{font-size:19px;font-weight:700;color:var(--lbl);letter-spacing:-.4px;}
-.hdr-sub{font-size:11px;color:var(--lbl2);margin-top:3px;}
-.fbar{background:var(--card);border-radius:var(--r14);padding:10px 14px;border:0.5px solid var(--sep);display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.04);}
-.fg{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
-.fl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--lbl2);white-space:nowrap;}
-.fsep{width:0.5px;height:18px;background:var(--sep);}
-select{font-size:10px;padding:3px 20px 3px 8px;border-radius:var(--pill);border:0.5px solid rgba(60,60,67,.2);background:rgba(120,120,128,.08);color:var(--lbl);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' stroke='rgba(60,60,67,0.5)' stroke-width='1.3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;font-family:inherit;}
-.chip{font-size:10px;padding:3px 10px;border-radius:var(--pill);border:0.5px solid var(--sep);background:rgba(120,120,128,.07);color:var(--lbl2);cursor:pointer;font-family:inherit;transition:all .15s;}
-.chip.on-g{background:rgba(52,199,89,.1);border-color:rgba(52,199,89,.35);color:#248A3D;font-weight:700;}
-.chip.on-o{background:rgba(255,149,0,.1);border-color:rgba(255,149,0,.35);color:#C56600;font-weight:700;}
-.chip.on-p{background:rgba(175,82,222,.1);border-color:rgba(175,82,222,.35);color:#7B2FA7;font-weight:700;}
-.chip.on-b{background:rgba(0,122,255,.1);border-color:rgba(0,122,255,.35);color:var(--b);font-weight:700;}
-.chip.on-t{background:rgba(50,173,230,.1);border-color:rgba(50,173,230,.35);color:#0a5a8a;font-weight:700;}
-.row{display:grid;gap:10px;}
-.r4{grid-template-columns:repeat(4,minmax(0,1fr));}
-.r2{grid-template-columns:repeat(2,minmax(0,1fr));}
-.r32{grid-template-columns:2fr 1fr;}
-.card{background:var(--card);border-radius:var(--r14);padding:12px 14px;border-top:0.5px solid var(--sep);border-right:0.5px solid var(--sep);border-bottom:0.5px solid var(--sep);border-left-width:3px;border-left-style:solid;box-shadow:0 1px 4px rgba(0,0,0,.05);}
-.ac{background:var(--card);border-radius:var(--r14);padding:12px 14px;border:0.5px solid var(--sep);box-shadow:0 1px 4px rgba(0,0,0,.05);}
-.sc{border-radius:var(--r10);padding:12px 14px;border:0.5px solid transparent;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;}
-.sc-b{background:#EBF5FF;border-color:#BBD9FF;}.sc-b::before{background:var(--b);}
-.sc-g{background:#EDFAF0;border-color:#B8EFC7;}.sc-g::before{background:var(--g);}
-.sc-o{background:#FFF6E5;border-color:#FFD9A0;}.sc-o::before{background:var(--o);}
-.sc-r{background:#FFF0EE;border-color:#FFB8B3;}.sc-r::before{background:var(--r);}
-.sl{font-size:10px;color:var(--lbl2);margin-bottom:3px;font-weight:500;}
-.sv{font-size:20px;font-weight:700;line-height:1.1;letter-spacing:-.4px;}
-.ss{font-size:9px;color:var(--lbl2);margin-top:2px;}
-.sv-b{color:var(--b);}.sv-g{color:#248A3D;}.sv-o{color:#C56600;}.sv-r{color:var(--r);}
-.divider{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:2px 0 8px;border-bottom:0.5px solid var(--sep);margin-bottom:9px;}
-.krow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;}
-.kc{border-radius:var(--r10);padding:10px 10px 8px;border:0.5px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.kc-g{background:#EDFAF0;border-color:#B8EFC7;}.kc-r{background:#FFF0EE;border-color:#FFB8B3;}.kc-b{background:#EBF5FF;border-color:#BBD9FF;}
-.kc-gr{background:#F5F5F7;border-color:#D1D1D6;}.kc-t{background:#E8F7FD;border-color:#9FD9F0;}.kc-o{background:#FFF6E5;border-color:#FFD9A0;}
-.knum{font-size:19px;font-weight:700;line-height:1;letter-spacing:-.3px;}
-.kn-g{color:#248A3D;}.kn-r{color:var(--r);}.kn-b{color:var(--b);}.kn-gr{color:var(--gr);}.kn-t{color:#0a5a8a;}.kn-o{color:#C56600;}
-.klbl{font-size:9px;color:var(--lbl2);margin-top:2px;font-weight:500;}
-.kpk{font-size:8px;margin-top:4px;padding:1px 5px;border-radius:var(--pill);display:inline-block;font-weight:600;}
-.ctitle{font-size:11px;font-weight:700;color:var(--lbl);margin-bottom:2px;}
-.csub{font-size:9px;color:var(--lbl2);margin-bottom:5px;}
-.cw{position:relative;width:100%;}
-.leg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
-.leg span{display:flex;align-items:center;gap:3px;font-size:9px;color:var(--lbl2);}
-.ld{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
-.g-hero{border-radius:var(--r10);padding:10px 12px;border:0.5px solid var(--sep);box-shadow:0 1px 3px rgba(0,0,0,.04);}
-.ratio-track{height:22px;border-radius:7px;overflow:hidden;display:flex;margin:6px 0;}
-.ratio-m{background:var(--b);display:flex;align-items:center;justify-content:flex-end;padding-right:7px;font-size:9px;font-weight:700;color:#fff;}
-.ratio-f{background:var(--pk);display:flex;align-items:center;justify-content:flex-start;padding-left:7px;font-size:9px;font-weight:700;color:#fff;}
-.sep-kc{border-radius:var(--r10);padding:9px 8px;border:0.5px solid var(--sep);text-align:center;background:var(--card2);}
-.growth-card{border-radius:var(--r10);padding:9px 11px;border:0.5px solid transparent;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.g-bar{width:100%;height:5px;border-radius:3px;background:#E5E5EA;margin-top:5px;}
-.g-fill{height:100%;border-radius:3px;}
-.t10{width:100%;border-collapse:collapse;font-size:10px;}
-.t10 th{font-size:8px;font-weight:700;color:var(--lbl2);text-transform:uppercase;letter-spacing:.04em;padding:4px 6px;background:var(--bg);}
-.t10 td{padding:6px 6px;border-bottom:0.5px solid var(--sep);}
-.t10 tr:last-child td{border-bottom:none;}
-.rb{width:17px;height:17px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;}
-.pill-lbl{display:inline-block;padding:1px 6px;border-radius:var(--pill);font-size:9px;font-weight:700;}
-.cat-table{width:100%;border-collapse:collapse;font-size:10px;}
-.cat-table th{font-size:8px;font-weight:700;color:var(--lbl2);text-transform:uppercase;letter-spacing:.04em;padding:4px 7px;background:var(--bg);}
-.cat-table td{padding:6px 7px;border-bottom:0.5px solid var(--sep);}
-.cat-table tr:last-child td{border-bottom:none;}
-.pill-m{display:inline-block;padding:1px 7px;border-radius:var(--pill);background:rgba(0,122,255,.12);color:var(--b);font-weight:700;font-size:9px;}
-.pill-f{display:inline-block;padding:1px 7px;border-radius:var(--pill);background:rgba(255,45,85,.12);color:var(--pk);font-weight:700;font-size:9px;}
-.pill-t{display:inline-block;padding:1px 7px;border-radius:var(--pill);background:rgba(52,199,89,.12);color:#248A3D;font-weight:700;font-size:9px;}
-.pshare-card{border-radius:var(--r10);padding:10px 12px;border:0.5px solid var(--sep);box-shadow:0 1px 3px rgba(0,0,0,.04);}
-.bi-block{background:var(--card);border-radius:var(--r14);padding:12px 14px;border:0.5px solid rgba(88,86,214,.2);border-left:3px solid var(--i);box-shadow:0 1px 4px rgba(0,0,0,.05);}
-.bi-title{font-size:9px;font-weight:700;color:var(--i);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
-.bi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
-.bi-item{background:#F0EFFF;border-radius:var(--r10);padding:8px 10px;border:0.5px solid rgba(88,86,214,.15);}
-.bi-it{font-size:8px;font-weight:700;color:var(--i);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;}
-.bi-tx{font-size:9px;color:var(--lbl2);line-height:1.6;}
-.bi-tx strong{color:var(--i);font-weight:700;}
-.rec-kc{border-radius:var(--r10);padding:11px 13px;border:0.5px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.rec-table{width:100%;border-collapse:collapse;font-size:10px;}
-.rec-table th{font-size:8.5px;font-weight:700;color:var(--lbl2);text-transform:uppercase;letter-spacing:.05em;padding:6px 9px;background:var(--bg);border-bottom:1.5px solid var(--sep);text-align:center;}
-.rec-table th:first-child{text-align:left;}
-.rec-table td{padding:7px 9px;border-bottom:0.5px solid var(--sep);text-align:center;vertical-align:middle;}
-.rec-table td:first-child{text-align:left;font-weight:600;}
-.rec-table tr:last-child td{border-bottom:none;font-weight:700;background:var(--bg);}
-.rpill{display:inline-block;padding:2px 8px;border-radius:var(--pill);font-size:9px;font-weight:700;}
-.rpill-r{background:#EBF5FF;color:var(--b);}
-.rpill-n{background:#F5EEFF;color:#7B2FA7;}
-.rpill-t{background:#EDFAF0;color:#248A3D;}
-.badge-peak{display:inline-block;padding:1px 5px;border-radius:var(--pill);font-size:8px;font-weight:700;background:#FFF6E5;color:#C56600;}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;align-items:center;justify-content:center;}
-.overlay.show{display:flex;}
-.popup{background:rgba(255,255,255,.98);border:0.5px solid rgba(60,60,67,.15);border-radius:18px;width:min(90vw,840px);max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.18);}
-.pop-hdr{padding:13px 17px 11px;border-bottom:0.5px solid var(--sep);display:flex;align-items:center;gap:10px;}
-.pop-accent{width:4px;height:34px;border-radius:2px;flex-shrink:0;}
-.pop-titles{flex:1;}
-.pop-title{font-size:14px;font-weight:700;color:var(--lbl);letter-spacing:-.2px;}
-.pop-sub{font-size:10px;color:var(--lbl2);margin-top:1px;}
-.pop-close{width:24px;height:24px;border-radius:50%;background:rgba(60,60,67,.08);border:none;color:var(--lbl);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.pop-close:hover{background:rgba(60,60,67,.15);}
-.pop-body{padding:15px 17px;overflow-y:auto;flex:1;}
-.pop-legend{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:11px;}
-.pop-legend span{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--lbl2);}
-.pop-ld{width:10px;height:10px;border-radius:3px;display:inline-block;}
-.pop-cw{position:relative;width:100%;height:290px;}
-.pop-insight{margin-top:13px;background:#F5F5F7;border-radius:var(--r10);padding:10px 13px;font-size:11px;color:var(--lbl2);line-height:1.7;border:0.5px solid var(--sep);}
-.pop-insight strong{color:var(--lbl);font-weight:600;}
-</style>
 
-<div class="shell">
+    const { useState, useEffect, useMemo, useRef } = React;
+    const { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend, CartesianGrid, Area, AreaChart } = Recharts;
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-brand">
-    <div class="nav-icon"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="1" width="5.5" height="5.5" rx="1.5" fill="white"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1.5" fill="white"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1.5" fill="white"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.5" fill="white"/></svg></div>
-    <div><div class="nav-t1">IIEI &amp; H</div><div class="nav-t2">HR Dashboard 2025</div></div>
-  </div>
-  <div class="nav-sec">Recruitment</div>
-  <button class="nb active" onclick="openPop('recOverview',this)"><span class="nb-dot" style="background:#34C759;"></span><span class="nb-lbl" style="font-weight:700;">Recruitment overview</span></button>
-  <button class="nb nb-sub" onclick="openPop('recMonthly',this)"><span class="nb-dot" style="background:#007AFF;width:5px;height:5px;"></span><span class="nb-lbl">Monthly total hires</span></button>
-  <button class="nb nb-sub" onclick="openPop('recDhakaBranch',this)"><span class="nb-dot" style="background:#32ADE6;width:5px;height:5px;"></span><span class="nb-lbl">Dhaka vs Branch</span></button>
-  <button class="nb nb-sub" onclick="openPop('recReplaceNew',this)"><span class="nb-dot" style="background:#AF52DE;width:5px;height:5px;"></span><span class="nb-lbl">Replace vs New hire</span></button>
-  <div class="nav-sec">Workforce</div>
-  <button class="nb" onclick="openPop('hcTrend',this)"><span class="nb-dot" style="background:#007AFF;"></span><span class="nb-lbl">Headcount trend</span></button>
-  <button class="nb" onclick="openPop('staffMix',this)"><span class="nb-dot" style="background:#FF9500;"></span><span class="nb-lbl">Staff mix</span></button>
-  <button class="nb" onclick="openPop('hcSal',this)"><span class="nb-dot" style="background:#5856D6;"></span><span class="nb-lbl">HC% vs Salary%</span></button>
-  <div class="nav-sec">Salary</div>
-  <button class="nb" onclick="openPop('salaryBill',this)"><span class="nb-dot" style="background:#32ADE6;"></span><span class="nb-lbl">Monthly salary</span></button>
-  <button class="nb" onclick="openPop('salaryChange',this)"><span class="nb-dot" style="background:#34C759;"></span><span class="nb-lbl">Salary change trend</span></button>
-  <button class="nb" onclick="openPop('payrollShare',this)"><span class="nb-dot" style="background:#AF52DE;"></span><span class="nb-lbl">Payroll by category</span></button>
-  <button class="nb" onclick="openPop('hospSal',this)"><span class="nb-dot" style="background:#32ADE6;"></span><span class="nb-lbl">Hospital salary</span></button>
-  <div class="nav-sec">Movement</div>
-  <button class="nb" onclick="openPop('joinSep',this)"><span class="nb-dot" style="background:#FF3B30;"></span><span class="nb-lbl">Joinings vs Sep.</span></button>
-  <button class="nb" onclick="openPop('turnover',this)"><span class="nb-dot" style="background:#FF9500;"></span><span class="nb-lbl">Monthly turnover %</span></button>
-  <button class="nb" onclick="openPop('leave',this)"><span class="nb-dot" style="background:#5856D6;"></span><span class="nb-lbl">Monthwise leave applications</span></button>
-  <button class="nb" onclick="openPop('sepMode',this)"><span class="nb-dot" style="background:#FF3B30;"></span><span class="nb-lbl">Separation mode</span></button>
-  <div class="nav-sec">Department</div>
-  <button class="nb" onclick="openPop('top10',this)"><span class="nb-dot" style="background:#FF9500;"></span><span class="nb-lbl">Top 10 departments</span></button>
-  <button class="nb" onclick="openPop('growth5',this)"><span class="nb-dot" style="background:#34C759;"></span><span class="nb-lbl">Fastest growing depts</span></button>
-  <div class="nav-sec">Hospital</div>
-  <button class="nb" onclick="openPop('hospAllHC',this)"><span class="nb-dot" style="background:#007AFF;"></span><span class="nb-lbl">All hospitals overlay</span></button>
-  <div class="nav-sec">People</div>
-  <button class="nb" onclick="openPop('genderRatio',this)"><span class="nb-dot" style="background:#FF2D55;"></span><span class="nb-lbl">Gender ratio</span></button>
-  <button class="nb" onclick="openPop('genderCat',this)"><span class="nb-dot" style="background:#FF2D55;"></span><span class="nb-lbl">Gender by category</span></button>
-</nav>
+    // Lucide icon stubs
+    const makeIcon = (label) => ({ className = 'w-4 h-4', style }) =>
+      React.createElement('svg', { className, style, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2 },
+        React.createElement('circle',{cx:12,cy:12,r:10}));
+    const LayoutDashboard=makeIcon('LD'), UsersIcon=makeIcon('U'), FileText=makeIcon('FT'),
+      FlaskConical=makeIcon('FC'), ClipboardList=makeIcon('CL'), CheckCircle2=makeIcon('CC'),
+      XCircle=makeIcon('XC'), Clock=makeIcon('CK'), Printer=makeIcon('PR'), Download=makeIcon('DL'),
+      LogOut=makeIcon('LO'), Plus=makeIcon('PL'), Search=makeIcon('SR'), Upload=makeIcon('UP'),
+      AlertCircle=makeIcon('AC'), TrendingUp=makeIcon('TU'), Activity=makeIcon('AV'),
+      UserCheck=makeIcon('UC'), Stethoscope=makeIcon('ST'), Calendar=makeIcon('CA'),
+      Eye=makeIcon('EY'), Trash2=makeIcon('T2'), Edit3=makeIcon('E3'), ChevronRight=makeIcon('CR'),
+      ShieldCheck=makeIcon('SC'), FilePlus2=makeIcon('FP'), Microscope=makeIcon('MC'),
+      BarChart3=makeIcon('BC'), Lock=makeIcon('LK'), User=makeIcon('UR'), X=makeIcon('X'),
+      Check=makeIcon('CH'), AlertTriangle=makeIcon('AT'), FileSpreadsheet=makeIcon('FS'),
+      ArrowRight=makeIcon('AR'), Info=makeIcon('IN'), CheckSquare=makeIcon('CS'), Square=makeIcon('SQ'),
+      UserIcon=makeIcon('UI');
 
-<main class="main">
-<div class="db">
-
-<div class="hdr">
-  <img class="logo-img" src="https://assets.bizclikmedia.net/576/30b9f4df69c9ef786a4e7e9d38116f1d:2cee67e9ad05480739eef6ec9ec0b428/picture" alt="IIEI&H" onerror="this.style.display='none';document.getElementById('lfb').style.display='flex';"/>
-  <div id="lfb" class="logo-fb">IIEI</div>
-  <div class="hdv"></div>
-  <div style="text-align:center;">
-    <div class="hdr-org">IIEI &amp; H</div>
-    <div class="hdr-title">HR Operation — 2025</div>
-    <div class="hdr-sub">Annual Workforce Dashboard &nbsp;·&nbsp; Jan – Dec 2025</div>
-  </div>
-</div>
-
-<div class="fbar">
-  <div class="fg"><span class="fl" style="color:var(--b);">Month</span>
-    <select id="gFrom" onchange="applyAll()"><option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option><option value="4">May</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Aug</option><option value="8">Sep</option><option value="9">Oct</option><option value="10">Nov</option><option value="11">Dec</option></select>
-    <span style="font-size:9px;color:var(--lbl2);">→</span>
-    <select id="gTo" onchange="applyAll()"><option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option><option value="4">May</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Aug</option><option value="8">Sep</option><option value="9">Oct</option><option value="10">Nov</option><option value="11" selected>Dec</option></select>
-  </div>
-  <div class="fsep"></div>
-  <div class="fg"><span class="fl" style="color:#248A3D;">Category</span>
-    <button class="chip on-g" data-cat="all" onclick="setCat('all',this)">All</button>
-    <button class="chip" data-cat="Doctors" onclick="setCat('Doctors',this)">Doctors</button>
-    <button class="chip" data-cat="Clinical" onclick="setCat('Clinical',this)">Clinical</button>
-    <button class="chip" data-cat="Nonclinical" onclick="setCat('Nonclinical',this)">Non-clinical</button>
-  </div>
-  <div class="fsep"></div>
-  <div class="fg"><span class="fl" style="color:#C56600;">Location</span>
-    <button class="chip on-o" data-loc="all" onclick="setLoc('all',this)">All</button>
-    <button class="chip" data-loc="main" onclick="setLoc('main',this)">Main</button>
-    <button class="chip" data-loc="branch" onclick="setLoc('branch',this)">Branch</button>
-  </div>
-  <div class="fsep"></div>
-  <div class="fg"><span class="fl" style="color:#7B2FA7;">Highlight</span>
-    <button class="chip on-p" data-hl="none" onclick="setHl('none',this)">None</button>
-    <button class="chip" data-hl="peak" onclick="setHl('peak',this)">Peak</button>
-    <button class="chip" data-hl="drop" onclick="setHl('drop',this)">Dips</button>
-  </div>
-</div>
-
-<div class="row r4">
-  <div class="sc sc-b"><div class="sl">Headcount (Dec)</div><div class="sv sv-b" id="sc-hc">1,184</div><div class="ss">+59 since Jan</div></div>
-  <div class="sc sc-g"><div class="sl">Avg monthly salary</div><div class="sv sv-g" id="sc-sal">৳63.8M</div><div class="ss">filtered avg</div></div>
-  <div class="sc sc-o"><div class="sl">YTD joinings</div><div class="sv sv-o" id="sc-join">151</div><div class="ss" id="sc-join-sub">vs 84 separations</div></div>
-  <div class="sc sc-r"><div class="sl">Annual turnover</div><div class="sv sv-r" id="sc-to">7.3%</div><div class="ss">cumulative 2025</div></div>
-</div>
-
-<!-- HR ACTIVITY — Renewals & Promos updated to 130, peak Jan (116) -->
-<div class="ac" style="border-left:3px solid var(--p);">
-  <div class="divider" style="color:var(--p);">HR activity summary — full year 2025</div>
-  <div class="krow">
-    <div class="kc kc-g"><div class="knum kn-g">151</div><div class="klbl">Joinings</div><span class="kpk" style="background:#EDFAF0;color:#248A3D;">Peak: Aug (30)</span></div>
-    <div class="kc kc-r"><div class="knum kn-r">84</div><div class="klbl">Separations</div><span class="kpk" style="background:#FFF0EE;color:var(--r);">Peak: Aug (12)</span></div>
-    <div class="kc kc-b"><div class="knum kn-b">70</div><div class="klbl">Confirmations</div><span class="kpk" style="background:#EBF5FF;color:var(--b);">Peak: Jul (15)</span></div>
-    <div class="kc kc-gr"><div class="knum kn-gr">10</div><div class="klbl">Transfers</div><span class="kpk" style="background:#F5F5F7;color:var(--gr);">Jan &amp; Dec (3)</span></div>
-    <!-- ★ Updated: Renewals & Promos → 130, peak Jan (116) -->
-    <div class="kc kc-t"><div class="knum kn-t">130</div><div class="klbl">Renewals &amp; Promos</div><span class="kpk" style="background:#E8F7FD;color:#0a5a8a;">Peak: Jan (116)</span></div>
-    <div class="kc kc-o"><div class="knum kn-o">54</div><div class="klbl">Disciplinary</div><span class="kpk" style="background:#FFF6E5;color:#C56600;">Peak: Jul (11)</span></div>
-  </div>
-</div>
-
-<!-- RECRUITMENT -->
-<div class="ac" style="border-left:3px solid var(--g);">
-  <div class="divider" style="color:#248A3D;">Recruitment overview — full year 2025 &nbsp;·&nbsp; 151 total hires</div>
-  <div class="row r4" style="margin-bottom:12px;">
-    <div class="rec-kc" style="background:#EDFAF0;border-color:#B8EFC7;"><div style="font-size:9px;font-weight:700;color:#248A3D;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Total hires</div><div style="font-size:24px;font-weight:700;color:#248A3D;letter-spacing:-.4px;">151</div><div style="font-size:9px;color:var(--lbl2);margin-top:2px;">Jan–Dec 2025</div></div>
-    <div class="rec-kc" style="background:#EBF5FF;border-color:#BBD9FF;"><div style="font-size:9px;font-weight:700;color:var(--b);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Replacement hires</div><div style="font-size:24px;font-weight:700;color:var(--b);letter-spacing:-.4px;">107</div><div style="font-size:9px;color:var(--lbl2);margin-top:2px;">70.9% of total</div></div>
-    <div class="rec-kc" style="background:#F5EEFF;border-color:#D9B8FF;"><div style="font-size:9px;font-weight:700;color:#7B2FA7;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">New positions</div><div style="font-size:24px;font-weight:700;color:#7B2FA7;letter-spacing:-.4px;">44</div><div style="font-size:9px;color:var(--lbl2);margin-top:2px;">29.1% of total</div></div>
-    <div class="rec-kc" style="background:#FFF6E5;border-color:#FFD9A0;"><div style="font-size:9px;font-weight:700;color:#C56600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Peak month</div><div style="font-size:24px;font-weight:700;color:#C56600;letter-spacing:-.4px;">Aug</div><div style="font-size:9px;color:var(--lbl2);margin-top:2px;">30 hires · 23 Dhaka, 7 Branch</div></div>
-  </div>
-  <div style="background:var(--card2);border-radius:var(--r10);padding:12px 14px;border:0.5px solid var(--sep);margin-bottom:10px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:9px;">
-      <div><div class="ctitle">Month-wise total recruitment</div><div class="csub">Total hires per month — filter by location</div></div>
-      <div style="display:flex;align-items:center;gap:5px;">
-        <span class="fl" style="color:var(--b);">Location</span>
-        <button class="chip on-b" id="rSlicAll" onclick="setRecSlicer('all',this)">All</button>
-        <button class="chip" id="rSlicDhaka" onclick="setRecSlicer('dhaka',this)">Dhaka</button>
-        <button class="chip" id="rSlicBranch" onclick="setRecSlicer('branch',this)">Branch</button>
-      </div>
-    </div>
-    <div class="leg" id="recMonLeg"><span><span class="ld" style="background:#007AFF"></span>Dhaka hires</span><span><span class="ld" style="background:#32ADE6"></span>Branch hires</span></div>
-    <div class="cw" style="height:185px"><canvas id="cRecMonthly"></canvas></div>
-  </div>
-  <div class="row r2" style="margin-bottom:10px;">
-    <div>
-      <div class="ctitle">Dhaka vs Branch — monthly total hires</div>
-      <div class="csub">Location split with data labels</div>
-      <div class="leg"><span><span class="ld" style="background:#007AFF"></span>Dhaka</span><span><span class="ld" style="background:#32ADE6"></span>Branch</span></div>
-      <div class="cw" style="height:175px"><canvas id="cRecLine"></canvas></div>
-    </div>
-    <div>
-      <div class="ctitle">Replace vs new hire — monthly</div>
-      <div class="csub">All locations combined</div>
-      <div class="leg"><span><span class="ld" style="background:#FF9500"></span>Replacement (107)</span><span><span class="ld" style="background:#AF52DE"></span>New positions (44)</span></div>
-      <div class="cw" style="height:175px"><canvas id="cRecType"></canvas></div>
-    </div>
-  </div>
-  <div style="background:var(--card2);border-radius:var(--r10);padding:12px 14px;border:0.5px solid var(--sep);">
-    <div style="margin-bottom:10px;"><div class="ctitle">Dhaka &amp; Branch — recruitment breakdown table</div><div class="csub">Month-wise replacement vs new hires by location</div></div>
-    <table class="rec-table">
-      <thead>
-        <tr><th style="text-align:left;">Month</th><th colspan="2" style="background:#EBF5FF;color:var(--b);border-bottom:1.5px solid #BBD9FF;">Dhaka (Main)</th><th colspan="2" style="background:#E8F7FD;color:#0a5a8a;border-bottom:1.5px solid #9FD9F0;">Branch</th><th style="background:#EDFAF0;color:#248A3D;border-bottom:1.5px solid #B8EFC7;">Total</th></tr>
-        <tr><th style="text-align:left;">—</th><th style="background:#EBF5FF;color:var(--b);">Replace</th><th style="background:#EBF5FF;color:var(--b);">New</th><th style="background:#E8F7FD;color:#0a5a8a;">Replace</th><th style="background:#E8F7FD;color:#0a5a8a;">New</th><th style="background:#EDFAF0;color:#248A3D;">All hires</th></tr>
-      </thead>
-      <tbody id="recTableBody"></tbody>
-    </table>
-  </div>
-</div>
-
-<div class="ac" style="border-left:3px solid var(--i);">
-  <div class="divider" style="color:var(--i);">HC growth % vs salary growth % — month on month</div>
-  <div class="row r4" style="margin-bottom:9px;">
-    <div class="sc sc-b" style="padding:10px 12px;"><div class="sl">HC Jan→Dec</div><div class="sv sv-b" id="ins-hc">+5.2%</div><div class="ss">1,125→1,184</div></div>
-    <div class="sc sc-g" style="padding:10px 12px;"><div class="sl">Salary Jan→Dec</div><div class="sv sv-g" id="ins-sal">+8.6%</div><div class="ss">৳61.4M→৳66.6M</div></div>
-    <div class="sc sc-o" style="padding:10px 12px;"><div class="sl">Growth gap</div><div class="sv sv-o" id="ins-gap">+3.4pp</div><div class="ss" id="ins-gap-sub">Salary grew faster</div></div>
-    <div class="sc sc-r" style="padding:10px 12px;"><div class="sl">Per-capita Δ</div><div class="sv sv-r" id="ins-pc">+3.2%</div><div class="ss">cost per employee</div></div>
-  </div>
-  <div class="leg"><span><span class="ld" style="background:var(--b)"></span>HC %</span><span><span class="ld" style="background:#248A3D"></span>Salary %</span></div>
-  <div class="cw" style="height:175px"><canvas id="cHcSal"></canvas></div>
-</div>
-
-<div class="row r2">
-  <div class="card" style="border-left-color:var(--b);">
-    <div class="ctitle">Headcount trend by category</div>
-    <div class="csub">Monthly staff levels · all groups</div>
-    <div class="leg"><span><span class="ld" style="background:#007AFF"></span>Doctors</span><span><span class="ld" style="background:#34C759"></span>Clinical</span><span><span class="ld" style="background:#FF9500"></span>Non-clinical</span><span><span class="ld" style="background:#AF52DE"></span>Total</span></div>
-    <div class="cw" style="height:185px"><canvas id="c1"></canvas></div>
-  </div>
-  <div class="card" style="border-left-color:var(--t);">
-    <div class="ctitle">Monthly salary</div>
-    <div class="csub">Total gross payroll per month (৳M)</div>
-    <div class="cw" style="height:205px"><canvas id="c2"></canvas></div>
-  </div>
-</div>
-
-<div class="row r2">
-  <div class="card" style="border-left-color:var(--g);">
-    <div class="ctitle">Monthly salary change trend</div>
-    <div class="csub">Month-on-month Δ (৳M)</div>
-    <div class="leg"><span><span class="ld" style="background:#34C759"></span>Increase</span><span><span class="ld" style="background:#FF3B30"></span>Decrease</span></div>
-    <div class="cw" style="height:170px"><canvas id="c8"></canvas></div>
-  </div>
-  <div class="card" style="border-left-color:var(--r);">
-    <div class="ctitle">Joinings vs separations</div>
-    <div class="csub">Monthly workforce movement</div>
-    <div class="leg"><span><span class="ld" style="background:#34C759"></span>Joined</span><span><span class="ld" style="background:#FF3B30"></span>Separated</span></div>
-    <div class="cw" style="height:170px"><canvas id="c3"></canvas></div>
-  </div>
-</div>
-
-<div class="row r2">
-  <div class="card" style="border-left-color:var(--o);">
-    <div class="ctitle">Monthly turnover %</div>
-    <div class="csub">Separations as % of headcount</div>
-    <div class="cw" style="height:170px"><canvas id="c4"></canvas></div>
-  </div>
-  <div class="card" style="border-left-color:var(--i);">
-    <div class="ctitle">Monthwise leave applications</div>
-    <div class="csub">Total applications per month · 9,858 annual · peak Dec (1,087)</div>
-    <div class="cw" style="height:170px"><canvas id="c7"></canvas></div>
-  </div>
-</div>
-
-<div class="row r2">
-  <div class="ac" style="border-left:3px solid var(--p);">
-    <div class="divider" style="color:var(--p);">Annual payroll share by category — ৳766.1M</div>
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:9px;">
-      <div class="pshare-card" style="background:#EBF5FF;border-color:#BBD9FF;"><div style="font-size:17px;font-weight:700;color:var(--b);">৳333M</div><div style="font-size:11px;font-weight:700;color:var(--b);">43.5%</div><div style="font-size:9px;color:var(--lbl2);margin-top:2px;">Doctors · avg ৳176K/mo</div></div>
-      <div class="pshare-card" style="background:#EDFAF0;border-color:#B8EFC7;"><div style="font-size:17px;font-weight:700;color:#248A3D;">৳218M</div><div style="font-size:11px;font-weight:700;color:#248A3D;">28.5%</div><div style="font-size:9px;color:var(--lbl2);margin-top:2px;">Clinical · avg ৳35K/mo</div></div>
-      <div class="pshare-card" style="background:#FFF6E5;border-color:#FFD9A0;"><div style="font-size:17px;font-weight:700;color:#C56600;">৳214M</div><div style="font-size:11px;font-weight:700;color:#C56600;">28.0%</div><div style="font-size:9px;color:var(--lbl2);margin-top:2px;">Non-clinical · avg ৳42K/mo</div></div>
-    </div>
-    <div class="leg"><span><span class="ld" style="background:#007AFF"></span>Doctors</span><span><span class="ld" style="background:#34C759"></span>Clinical</span><span><span class="ld" style="background:#FF9500"></span>Non-clinical</span></div>
-    <div class="cw" style="height:150px"><canvas id="cCatDonut"></canvas></div>
-  </div>
-  <div class="ac" style="border-left:3px solid var(--t);">
-    <div class="divider" style="color:var(--t);">Hospital-wise annual salary — 2025</div>
-    <div class="cw" style="height:200px"><canvas id="cHospSal"></canvas></div>
-  </div>
-</div>
-
-<div class="row r2">
-  <div class="ac" style="border-left:3px solid var(--r);">
-    <div class="divider" style="color:var(--r);">Separation mode — 84 total</div>
-    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:9px;">
-      <div class="sep-kc"><div style="font-size:17px;font-weight:700;color:var(--r);">61</div><div style="font-size:10px;font-weight:700;color:var(--r);">72.6%</div><div style="font-size:8px;color:var(--lbl2);margin-top:2px;">Resignation</div></div>
-      <div class="sep-kc"><div style="font-size:17px;font-weight:700;color:var(--o);">11</div><div style="font-size:10px;font-weight:700;color:var(--o);">13.1%</div><div style="font-size:8px;color:var(--lbl2);margin-top:2px;">Misconduct</div></div>
-      <div class="sep-kc"><div style="font-size:17px;font-weight:700;color:var(--t);">9</div><div style="font-size:10px;font-weight:700;color:var(--t);">10.7%</div><div style="font-size:8px;color:var(--lbl2);margin-top:2px;">End Training</div></div>
-      <div class="sep-kc"><div style="font-size:17px;font-weight:700;color:var(--gr);">2</div><div style="font-size:10px;font-weight:700;color:var(--gr);">2.4%</div><div style="font-size:8px;color:var(--lbl2);margin-top:2px;">Retirement</div></div>
-      <div class="sep-kc"><div style="font-size:17px;font-weight:700;color:var(--i);">1</div><div style="font-size:10px;font-weight:700;color:var(--i);">1.2%</div><div style="font-size:8px;color:var(--lbl2);margin-top:2px;">Death</div></div>
-    </div>
-    <div class="leg"><span><span class="ld" style="background:#FF3B30"></span>Resignation</span><span><span class="ld" style="background:#FF9500"></span>Misconduct</span><span><span class="ld" style="background:#32ADE6"></span>Training</span></div>
-    <div class="cw" style="height:135px"><canvas id="cSep"></canvas></div>
-  </div>
-  <div class="ac" style="border-left:3px solid var(--pk);">
-    <div class="divider" style="color:var(--pk);">Male / female ratio — 1,184 total</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:9px;">
-      <div class="g-hero" style="background:#EBF5FF;border-color:#BBD9FF;"><div style="font-size:9px;font-weight:700;color:var(--lbl2);text-transform:uppercase;">Male</div><div style="font-size:20px;font-weight:700;color:var(--b);">595</div><div style="font-size:11px;font-weight:600;color:var(--b);">50.3%</div></div>
-      <div class="g-hero" style="background:#FFEEF2;border-color:#FFAFC1;"><div style="font-size:9px;font-weight:700;color:var(--lbl2);text-transform:uppercase;">Female</div><div style="font-size:20px;font-weight:700;color:var(--pk);">589</div><div style="font-size:11px;font-weight:600;color:var(--pk);">49.7%</div></div>
-      <div class="g-hero" style="background:#EDFAF0;border-color:#B8EFC7;"><div style="font-size:9px;font-weight:700;color:var(--lbl2);text-transform:uppercase;">Total</div><div style="font-size:20px;font-weight:700;color:#248A3D;">1,184</div><div style="font-size:11px;font-weight:600;color:#248A3D;">≈ 1:1</div></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:9px;font-weight:700;color:var(--b);">Male 50.3%</span><span style="font-size:9px;font-weight:700;color:var(--pk);">Female 49.7%</span></div>
-    <div class="ratio-track"><div class="ratio-m" style="width:50.3%;">595</div><div class="ratio-f" style="width:49.7%;">589</div></div>
-    <div class="leg" style="margin-top:6px;"><span><span class="ld" style="background:var(--b)"></span>Male</span><span><span class="ld" style="background:var(--pk)"></span>Female</span></div>
-    <div class="cw" style="height:95px"><canvas id="cGDonut"></canvas></div>
-  </div>
-</div>
-
-<div class="ac" style="border-left:3px solid var(--pk);">
-  <div class="divider" style="color:var(--pk);">Category-wise gender breakdown</div>
-  <div class="row r2" style="align-items:start;">
-    <table class="cat-table">
-      <thead><tr><th style="text-align:left;">Category</th><th>Male</th><th>Female</th><th>Total</th><th>M%</th><th>F%</th></tr></thead>
-      <tbody>
-        <tr><td style="font-weight:600;">Doctors</td><td style="text-align:center;"><span class="pill-m">91</span></td><td style="text-align:center;"><span class="pill-f">68</span></td><td style="text-align:center;"><span class="pill-t">159</span></td><td style="text-align:center;color:var(--b);font-weight:700;">57.2%</td><td style="text-align:center;color:var(--pk);font-weight:700;">42.8%</td></tr>
-        <tr><td style="font-weight:600;">Clinical support</td><td style="text-align:center;"><span class="pill-m">121</span></td><td style="text-align:center;"><span class="pill-f">386</span></td><td style="text-align:center;"><span class="pill-t">507</span></td><td style="text-align:center;color:var(--b);font-weight:700;">23.9%</td><td style="text-align:center;color:var(--pk);font-weight:700;">76.1%</td></tr>
-        <tr><td style="font-weight:600;">Non-clinical</td><td style="text-align:center;"><span class="pill-m">383</span></td><td style="text-align:center;"><span class="pill-f">135</span></td><td style="text-align:center;"><span class="pill-t">518</span></td><td style="text-align:center;color:var(--b);font-weight:700;">73.9%</td><td style="text-align:center;color:var(--pk);font-weight:700;">26.1%</td></tr>
-        <tr style="font-weight:700;background:var(--bg);"><td>Total</td><td style="text-align:center;"><span class="pill-m">595</span></td><td style="text-align:center;"><span class="pill-f">589</span></td><td style="text-align:center;"><span class="pill-t">1,184</span></td><td style="text-align:center;color:var(--b);">50.3%</td><td style="text-align:center;color:var(--pk);">49.7%</td></tr>
-      </tbody>
-    </table>
-    <div>
-      <div class="leg"><span><span class="ld" style="background:var(--b)"></span>Male</span><span><span class="ld" style="background:var(--pk)"></span>Female</span></div>
-      <div class="cw" style="height:170px"><canvas id="cGBar"></canvas></div>
-    </div>
-  </div>
-</div>
-
-<div class="row r32">
-  <div class="card" style="border-left-color:var(--t);">
-    <div class="ctitle">Main hospital vs branch headcount</div>
-    <div style="display:flex;gap:4px;margin:6px 0;">
-      <button class="chip on-g" onclick="switchSplit('Doctors',this)">Doctors</button>
-      <button class="chip" onclick="switchSplit('Clinical',this)">Clinical</button>
-      <button class="chip" onclick="switchSplit('Nonclinical',this)">Non-clinical</button>
-    </div>
-    <div class="leg"><span><span class="ld" style="background:#007AFF"></span>Main</span><span><span class="ld" style="background:#32ADE6"></span>Branch</span></div>
-    <div class="cw" style="height:160px"><canvas id="c5"></canvas></div>
-  </div>
-  <div class="card" style="border-left-color:var(--o);">
-    <div class="ctitle">Staff mix – Dec 2025</div>
-    <div class="csub">By employee category</div>
-    <div id="dleg" class="leg"></div>
-    <div class="cw" style="height:160px"><canvas id="c6"></canvas></div>
-  </div>
-</div>
-
-<!-- ★ DEPARTMENT-WISE HC — now with all 41 departments from JSON -->
-<div class="ac" style="border-left:3px solid var(--b);">
-  <div class="divider" style="color:var(--b);">Department-wise monthly headcount — 41 departments</div>
-  <div style="display:flex;gap:8px;margin-bottom:9px;align-items:center;flex-wrap:wrap;">
-    <span class="fl" style="color:var(--b);">Department</span>
-    <select id="deptSel" onchange="buildDeptChart()" style="max-width:180px;"></select>
-    <div class="fsep"></div>
-    <button class="chip on-g" id="dtLine" onclick="setDT('line',this)">Line</button>
-    <button class="chip" id="dtBar" onclick="setDT('bar',this)">Bar</button>
-  </div>
-  <div class="cw" style="height:180px"><canvas id="cDeptHC"></canvas></div>
-</div>
-
-<div class="ac" style="border-left:3px solid var(--o);">
-  <div class="divider" style="color:var(--o);">Top 10 departments — annual salary &amp; avg monthly headcount</div>
-  <div class="row r2" style="align-items:start;">
-    <table class="t10">
-      <thead><tr><th>#</th><th>Dept.</th><th style="text-align:right;">Annual salary</th><th style="text-align:center;">Avg HC</th></tr></thead>
-      <tbody id="t10body"></tbody>
-    </table>
-    <div>
-      <div class="leg"><span><span class="ld" style="background:var(--b)"></span>Salary (৳M)</span><span><span class="ld" style="background:var(--o)"></span>Avg HC</span></div>
-      <div class="cw" style="height:240px"><canvas id="cTop10"></canvas></div>
-    </div>
-  </div>
-</div>
-
-<div class="ac" style="border-left:3px solid var(--g);">
-  <div class="divider" style="color:#248A3D;">Top 5 fastest growing departments — Jan to Dec 2025</div>
-  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;" id="growthCards"></div>
-</div>
-
-<div class="ac" style="border-left:3px solid var(--t);">
-  <div class="divider" style="color:var(--t);">Hospital monthly headcount vs salary</div>
-  <div style="display:flex;gap:5px;margin-bottom:9px;flex-wrap:wrap;">
-    <button class="chip on-t" data-h="main" onclick="setHosp(this)">Main Hospital</button>
-    <button class="chip" data-h="barishal" onclick="setHosp(this)">Barishal</button>
-    <button class="chip" data-h="jamalpur" onclick="setHosp(this)">Jamalpur</button>
-    <button class="chip" data-h="naogaon" onclick="setHosp(this)">Naogaon</button>
-    <button class="chip" data-h="kulaura" onclick="setHosp(this)">Kulaura</button>
-    <button class="chip" data-h="ispahani" onclick="setHosp(this)">Ispahani IIEC</button>
-  </div>
-  <div class="row r2">
-    <div>
-      <div class="leg"><span><span class="ld" style="background:var(--t)"></span>Headcount (left)</span><span><span class="ld" style="background:var(--o)"></span>Salary ৳M (right)</span></div>
-      <div class="cw" style="height:210px"><canvas id="cHospMain"></canvas></div>
-    </div>
-    <div>
-      <div class="ctitle" style="margin-bottom:4px;">All hospitals — headcount overlay</div>
-      <div class="leg"><span><span class="ld" style="background:#007AFF"></span>Main</span><span><span class="ld" style="background:#34C759"></span>Barishal</span><span><span class="ld" style="background:#FF9500"></span>Jamalpur</span><span><span class="ld" style="background:#AF52DE"></span>Naogaon</span><span><span class="ld" style="background:#FF2D55"></span>Kulaura</span><span><span class="ld" style="background:#FF3B30"></span>Ispahani</span></div>
-      <div class="cw" style="height:210px"><canvas id="cHospAll"></canvas></div>
-    </div>
-  </div>
-</div>
-
-<div class="bi-block">
-  <div class="bi-title">HR Business Intelligence Notes — 2025</div>
-  <div class="bi-grid">
-    <div class="bi-item"><div class="bi-it">Recruitment efficiency</div><div class="bi-tx"><strong>70.9% of all hires (107/151) were replacements</strong>. August peak (30 hires) reflects post-increment attrition. Dhaka drove 80.8% of all recruitment.</div></div>
-    <div class="bi-item"><div class="bi-it">Workforce growth</div><div class="bi-tx">HC grew <strong>1,125→1,184 (+5.2%)</strong>. Q3 drove most expansion. <strong>IIEC-1 (+15)</strong>, <strong>NSS (+13)</strong>, <strong>BBH (+8)</strong> led headcount growth.</div></div>
-    <div class="bi-item"><div class="bi-it">Salary vs HC</div><div class="bi-tx">Payroll rose <strong>8.55%</strong> vs 5.2% HC — a <strong>3.35pp gap</strong>. Per-capita cost up 3.2%. July increment injected <strong>+৳3.96M</strong> in one month.</div></div>
-    <div class="bi-item"><div class="bi-it">Renewals &amp; Promos</div><div class="bi-tx"><strong>130 renewals &amp; promotions in 2025</strong> — significantly higher than previously tracked. January was peak month with <strong>116 renewals</strong>, indicating a large-scale contract renewal cycle at year start.</div></div>
-    <div class="bi-item"><div class="bi-it">Gender diversity</div><div class="bi-tx">Near-equal overall (<strong>50.3% M / 49.7% F</strong>). Clinical support <strong>76.1% female</strong>; non-clinical <strong>73.9% male</strong>.</div></div>
-    <div class="bi-item"><div class="bi-it">Branch performance</div><div class="bi-tx">Barishal strongest growth (+8 HC). <strong>Ispahani IIEC</strong> onboarded Aug at 16 staff. Branch avg salary ৳36.8K vs main ৳62.4K.</div></div>
-  </div>
-</div>
-
-</div>
-</main>
-</div>
-
-<!-- POPUP -->
-<div class="overlay" id="overlay" onclick="closeOutside(event)">
-  <div class="popup">
-    <div class="pop-hdr">
-      <div id="popAccent" class="pop-accent"></div>
-      <div class="pop-titles"><div class="pop-title" id="popTitle">Chart</div><div class="pop-sub" id="popSub"></div></div>
-      <button class="pop-close" onclick="closePop()">✕</button>
-    </div>
-    <div class="pop-body">
-      <div class="pop-legend" id="popLeg"></div>
-      <div class="pop-cw"><canvas id="popChart"></canvas></div>
-      <div class="pop-insight" id="popInsight"></div>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
-<script>
-Chart.register(ChartDataLabels);
-const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const BT={font:{size:9},autoSkip:false,maxRotation:0,color:'rgba(60,60,67,.45)'};
-const BG={color:'rgba(60,60,67,.07)'};
-const BS={x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT}};
-function rem(id,cfg){const c=Chart.getChart(id);if(c)c.destroy();new Chart(document.getElementById(id),cfg);}
-
-/* ══ DEPARTMENT DATA — all 41 depts from JSON ══ */
-const DEPT_DATA={
-  'Administration':[16,16,16,16,16,16,16,16,16,16,16,16],
-  'AESC':[0,0,0,0,0,0,0,1,1,1,1,1],
-  'Anesthesia':[22,22,22,22,22,22,22,22,22,22,21,21],
-  'BBH':[108,108,108,110,110,111,112,113,115,115,116,116],
-  'Call Center':[1,1,1,1,1,1,1,1,1,1,1,1],
-  'Cardiology':[5,5,5,5,6,6,6,6,6,6,6,6],
-  'Chief Executive Office':[2,2,2,2,2,2,2,2,2,2,2,2],
-  'Community Services':[7,7,7,7,7,6,7,7,7,7,7,7],
-  'Cornea':[21,21,22,22,23,23,23,23,23,23,23,23],
-  'CSSD':[10,10,10,10,10,10,10,10,10,10,10,10],
-  'Education Administration':[8,8,8,8,7,7,7,8,8,8,8,8],
-  'Engineering & Maintenance':[32,32,31,31,32,31,32,32,32,32,33,34],
-  'Finance & Accounts':[10,10,10,10,10,11,11,11,11,11,11,11],
-  'Glaucoma':[9,9,9,9,9,9,9,9,8,8,8,8],
-  'GOPD':[36,35,33,35,34,34,34,34,35,35,33,36],
-  'Hospitality':[38,38,38,37,38,38,38,39,39,39,39,38],
-  'Human Resources Management':[6,6,6,6,6,6,6,6,6,6,6,6],
-  'ICT':[11,11,11,11,11,11,11,11,11,11,11,11],
-  'IIEC-1':[0,0,0,0,0,0,0,16,16,14,15,15],
-  'JBH':[85,85,85,82,82,84,82,84,86,87,89,90],
-  'Kulaura':[17,17,17,16,16,17,17,18,18,18,17,19],
-  'Medical Services':[1,1,1,1,1,1,1,1,1,1,1,1],
-  'MRD':[9,9,9,9,9,9,8,8,8,8,8,8],
-  'NBH':[76,76,76,78,77,80,80,77,77,77,77,76],
-  'Neuro':[4,4,4,4,4,4,4,4,4,4,4,4],
-  'NSS':[251,250,249,249,253,253,257,259,260,262,264,264],
-  'Oculoplasty':[5,5,5,5,5,5,5,5,5,5,5,5],
-  'Optic Shop':[15,15,15,15,15,15,15,15,15,15,15,15],
-  'Optometry':[96,96,95,95,95,95,95,94,98,98,98,98],
-  'OSS':[140,140,140,139,139,141,142,142,142,142,141,145],
-  'OT':[11,11,11,11,11,11,11,10,10,10,10,10],
-  'Pathology & Microbiology':[16,16,16,16,16,17,18,18,17,18,18,18],
-  'Pediatric':[10,10,10,10,10,10,10,10,10,9,9,9],
-  'Pharmacy':[12,12,12,12,12,11,12,12,12,12,12,12],
-  'POPD':[1,1,1,1,3,3,3,3,3,3,3,3],
-  'Quality Assurance':[2,2,2,2,2,2,2,2,2,2,2,2],
-  'Research and Development':[0,0,0,0,0,0,0,0,1,1,1,1],
-  'Retina':[19,19,19,19,19,19,20,20,20,20,20,20],
-  'Store':[3,3,3,3,3,3,3,2,2,2,2,3],
-  'Supply Chain Management':[7,7,7,7,7,7,7,7,7,7,8,8],
-  'Training':[3,3,3,3,3,3,3,3,3,3,3,3],
-};
-const DEPT_NAMES=Object.keys(DEPT_DATA).sort();
-
-/* Populate department dropdown */
-const deptSel=document.getElementById('deptSel');
-DEPT_NAMES.forEach(name=>{const o=document.createElement('option');o.value=name;o.textContent=name;deptSel.appendChild(o);});
-
-/* RECRUITMENT */
-const RD=[{m:'Jan',dl:11,dn:4,bl:2,bn:0},{m:'Feb',dl:0,dn:0,bl:0,bn:0},{m:'Mar',dl:1,dn:0,bl:4,bn:0},{m:'Apr',dl:3,dn:0,bl:0,bn:0},{m:'May',dl:10,dn:4,bl:0,bn:0},{m:'Jun',dl:6,dn:1,bl:6,bn:0},{m:'Jul',dl:13,dn:1,bl:0,bn:0},{m:'Aug',dl:6,dn:17,bl:4,bn:3},{m:'Sep',dl:7,dn:5,bl:2,bn:3},{m:'Oct',dl:6,dn:1,bl:0,bn:1},{m:'Nov',dl:4,dn:8,bl:0,bn:3},{m:'Dec',dl:7,dn:3,bl:2,bn:3}];
-const recLabels=RD.map(r=>r.m);
-const dhakaTotal=RD.map(r=>r.dl+r.dn);
-const branchTotal=RD.map(r=>r.bl+r.bn);
-const replaceAll=RD.map(r=>r.dl+r.bl);
-const newAll=RD.map(r=>r.dn+r.bn);
-
-(function(){
-  const tb=document.getElementById('recTableBody');
-  let tDR=0,tDN=0,tBR=0,tBN=0;
-  RD.forEach(r=>{tDR+=r.dl;tDN+=r.dn;tBR+=r.bl;tBN+=r.bn;
-    const tot=r.dl+r.dn+r.bl+r.bn,pk=r.m==='Aug';
-    tb.innerHTML+=`<tr><td>${r.m}${pk?' <span class="badge-peak">★ Peak</span>':''}</td><td><span class="rpill rpill-r">${r.dl}</span></td><td><span class="rpill rpill-n">${r.dn}</span></td><td><span class="rpill rpill-r">${r.bl}</span></td><td><span class="rpill rpill-n">${r.bn}</span></td><td><span class="rpill rpill-t">${tot}</span></td></tr>`;
-  });
-  tb.innerHTML+=`<tr><td>Full Year 2025</td><td><span class="rpill rpill-r">${tDR}</span></td><td><span class="rpill rpill-n">${tDN}</span></td><td><span class="rpill rpill-r">${tBR}</span></td><td><span class="rpill rpill-n">${tBN}</span></td><td><span class="rpill rpill-t">${tDR+tDN+tBR+tBN}</span></td></tr>`;
-})();
-
-let recSlicer='all';
-function setRecSlicer(v,btn){document.querySelectorAll('#rSlicAll,#rSlicDhaka,#rSlicBranch').forEach(b=>b.classList.remove('on-b'));btn.classList.add('on-b');recSlicer=v;buildRecMonthly();}
-function buildRecMonthly(){
-  const leg=document.getElementById('recMonLeg');
-  let datasets=[];
-  if(recSlicer==='all'){
-    leg.innerHTML='<span><span style="width:7px;height:7px;border-radius:2px;background:#007AFF;display:inline-block;margin-right:3px;"></span>Dhaka hires</span>&nbsp;<span><span style="width:7px;height:7px;border-radius:2px;background:#32ADE6;display:inline-block;margin-right:3px;"></span>Branch hires</span>';
-    datasets=[{label:'Dhaka',data:dhakaTotal,backgroundColor:'#007AFF',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#007AFF',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}},{label:'Branch',data:branchTotal,backgroundColor:'#32ADE6',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#0a5a8a',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}}];
-  } else if(recSlicer==='dhaka'){
-    leg.innerHTML='<span><span style="width:7px;height:7px;border-radius:2px;background:#007AFF;display:inline-block;margin-right:3px;"></span>Dhaka Replace</span>&nbsp;<span><span style="width:7px;height:7px;border-radius:2px;background:#34C759;display:inline-block;margin-right:3px;"></span>Dhaka New</span>';
-    datasets=[{label:'Dhaka Replace',data:RD.map(r=>r.dl),backgroundColor:'#007AFF',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#007AFF',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}},{label:'Dhaka New',data:RD.map(r=>r.dn),backgroundColor:'#34C759',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#248A3D',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}}];
-  } else {
-    leg.innerHTML='<span><span style="width:7px;height:7px;border-radius:2px;background:#32ADE6;display:inline-block;margin-right:3px;"></span>Branch Replace</span>&nbsp;<span><span style="width:7px;height:7px;border-radius:2px;background:#AF52DE;display:inline-block;margin-right:3px;"></span>Branch New</span>';
-    datasets=[{label:'Branch Replace',data:RD.map(r=>r.bl),backgroundColor:'#32ADE6',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#0a5a8a',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}},{label:'Branch New',data:RD.map(r=>r.bn),backgroundColor:'#AF52DE',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#7B2FA7',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}}];
-  }
-  rem('cRecMonthly',{type:'bar',data:{labels:recLabels,datasets},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT}}}});
-}
-buildRecMonthly();
-rem('cRecLine',{type:'line',data:{labels:recLabels,datasets:[{label:'Dhaka',data:dhakaTotal,borderColor:'#007AFF',backgroundColor:'rgba(0,122,255,.08)',tension:.4,pointRadius:3.5,borderWidth:2,fill:true,datalabels:{anchor:'end',align:'top',color:'#007AFF',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}},{label:'Branch',data:branchTotal,borderColor:'#32ADE6',backgroundColor:'rgba(50,173,230,.08)',tension:.4,pointRadius:3.5,borderWidth:2,fill:true,datalabels:{anchor:'end',align:'bottom',color:'#0a5a8a',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18,bottom:10}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT,min:0}}}});
-rem('cRecType',{type:'bar',data:{labels:recLabels,datasets:[{label:'Replacement',data:replaceAll,backgroundColor:'#FF9500',borderRadius:3,datalabels:{anchor:'end',align:'end',color:'#C56600',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}},{label:'New position',data:newAll,backgroundColor:'#AF52DE',borderRadius:3,datalabels:{anchor:'end',align:'end',color:'#7B2FA7',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT}}}});
-
-/* MAIN DATA */
-const allO=[{total:1125,gross:61.4,to:0.89,join:17,sep:10,leave:786},{total:1123,gross:61.3,to:0.09,join:0,sep:1,leave:798},{total:1119,gross:61.2,to:0.36,join:5,sep:4,leave:531},{total:1119,gross:61.2,to:0.71,join:3,sep:8,leave:775},{total:1126,gross:61.5,to:0.35,join:14,sep:4,leave:786},{total:1134,gross:61.9,to:0.79,join:13,sep:9,leave:578},{total:1142,gross:65.8,to:0.44,join:14,sep:5,leave:1029},{total:1161,gross:66.5,to:1.03,join:30,sep:12,leave:718},{total:1170,gross:66.4,to:0.68,join:17,sep:8,leave:936},{total:1171,gross:66.2,to:0.51,join:8,sep:6,leave:821},{total:1174,gross:66.3,to:0.94,join:15,sep:11,leave:1013},{total:1184,gross:66.6,to:0.51,join:15,sep:6,leave:1087}];
-const GV=[61360716,61294476,61159093,61173791,61465632,61883055,65841173,66487248,66387661,66207540,66251764,66606715];
-const allHC={Doctors:[152,152,151,152,155,155,155,155,154,156,157,157],Clinical:[485,485,483,481,485,489,499,514,524,524,526,530],Nonclinical:[487,486,490,486,489,486,492,493,495,493,495,497]};
-const SD={Doctors:{main:[117,117,116,117,121,121,122,122,120,123,124,124],branch:[35,35,35,35,34,34,33,33,34,33,33,33]},Clinical:{main:[349,349,347,347,351,351,360,375,383,381,382,385],branch:[136,136,136,134,134,138,139,139,141,143,144,145]},Nonclinical:{main:[370,369,369,366,370,369,374,374,374,371,374,374],branch:[117,117,121,120,119,117,118,119,121,122,121,123]}};
-const TOP10=[{d:'NSS',sal:107.0,hc:255.9,c:'#007AFF'},{d:'Cornea',sal:67.3,hc:22.5,c:'#34C759'},{d:'OSS',sal:58.6,hc:141.1,c:'#FF9500'},{d:'BBH',sal:50.9,hc:111.8,c:'#AF52DE'},{d:'Optometry',sal:46.9,hc:96.1,c:'#5856D6'},{d:'Retina',sal:45.9,hc:19.5,c:'#FF2D55'},{d:'JBH',sal:37.2,hc:85.1,c:'#32ADE6'},{d:'Pediatric',sal:35.6,hc:9.8,c:'#FF3B30'},{d:'NBH',sal:33.6,hc:77.2,c:'#FF9500'},{d:'GOPD',sal:29.5,hc:34.5,c:'#8E8E93'}];
-const HOSP={main:{label:'Main Hospital',hc:[839,837,833,833,841,842,851,852,857,859,859,867],sal:[50.97,50.90,50.77,50.83,51.22,51.39,54.76,54.86,54.66,54.56,54.55,54.85]},barishal:{label:'Barishal Branch',hc:[108,108,108,110,110,111,112,113,115,115,116,116],sal:[3.97,3.97,3.97,4.00,4.00,4.09,4.45,4.47,4.51,4.50,4.52,4.50]},jamalpur:{label:'Jamalpur Branch',hc:[85,85,85,82,82,84,82,84,86,87,89,90],sal:[3.06,3.06,3.06,2.98,2.98,3.01,3.03,3.16,3.23,3.19,3.22,3.26]},naogaon:{label:'Naogaon Branch',hc:[76,76,76,78,77,80,80,77,77,77,77,76],sal:[2.76,2.76,2.76,2.79,2.69,2.77,2.94,2.82,2.82,2.83,2.83,2.81]},kulaura:{label:'Kulaura (PEC++)',hc:[17,17,17,16,16,17,17,18,18,18,17,19],sal:[0.60,0.60,0.60,0.58,0.58,0.62,0.66,0.67,0.66,0.66,0.64,0.68]},ispahani:{label:'Ispahani IIEC',hc:[0,0,0,0,0,0,0,16,16,14,15,15],sal:[0,0,0,0,0,0,0,0.40,0.40,0.36,0.38,0.39]}};
-const GROWTH=[{d:'IIEC-1',jan:0,dec:15,gain:15,c:'#007AFF'},{d:'NSS',jan:251,dec:264,gain:13,c:'#34C759'},{d:'BBH',jan:108,dec:116,gain:8,c:'#FF9500'},{d:'OSS',jan:140,dec:145,gain:5,c:'#AF52DE'},{d:'JBH',jan:85,dec:90,gain:5,c:'#FF2D55'}];
-
-rem('cSep',{type:'doughnut',data:{labels:['Resignation','Misconduct','End Training','Retirement','Death'],datasets:[{data:[61,11,9,2,1],backgroundColor:['#FF3B30','#FF9500','#32ADE6','#8E8E93','#5856D6'],borderWidth:2,borderColor:'#fff',datalabels:{color:'#fff',font:{size:8,weight:'700'},formatter:v=>v>2?v+'\n'+(v/84*100).toFixed(1)+'%':'',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'52%',plugins:{legend:{display:false},datalabels:{display:true}}}});
-rem('cGDonut',{type:'doughnut',data:{labels:['Male','Female'],datasets:[{data:[595,589],backgroundColor:['#007AFF','#FF2D55'],borderWidth:2,borderColor:'#fff',datalabels:{color:'#fff',font:{size:9,weight:'700'},formatter:v=>v+'\n'+(v/1184*100).toFixed(1)+'%',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'52%',plugins:{legend:{display:false},datalabels:{display:true}}}});
-rem('cGBar',{type:'bar',data:{labels:['Doctors','Clinical','Non-clinical','Total'],datasets:[{data:[91,121,383,595],backgroundColor:'#007AFF',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#007AFF',font:{size:8,weight:'700'},formatter:v=>v}},{data:[68,386,135,589],backgroundColor:'#FF2D55',borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#FF2D55',font:{size:8,weight:'700'},formatter:v=>v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT}}}});
-rem('cCatDonut',{type:'doughnut',data:{labels:['Doctors','Clinical','Non-clinical'],datasets:[{data:[333285863,218396864,214436864],backgroundColor:['#007AFF','#34C759','#FF9500'],borderWidth:2.5,borderColor:'#fff',datalabels:{color:'#fff',font:{size:9,weight:'700'},formatter:v=>'৳'+(v/1e6).toFixed(0)+'M\n'+(v/766118864*100).toFixed(1)+'%',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'48%',plugins:{legend:{display:false},datalabels:{display:true}}}});
-rem('cHospSal',{type:'bar',data:{labels:['Main Hospital','Barishal','Jamalpur','Naogaon','Kulaura','Ispahani'],datasets:[{data:[634.3,50.9,37.2,33.6,7.6,1.9],backgroundColor:['#007AFF','#34C759','#FF9500','#AF52DE','#FF2D55','#FF3B30'],borderRadius:4,datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.7)',font:{size:8,weight:'700'},formatter:v=>'৳'+v+'M'}}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:50}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:BG,ticks:{...BT,callback:v=>'৳'+v+'M'}},y:{grid:{display:false},ticks:{...BT,font:{size:9}}}}}});
-const dl=document.getElementById('dleg');['Doctors','Clinical support','Non-clinical'].forEach((l,i)=>{const s=document.createElement('span');s.style='display:flex;align-items:center;gap:3px;font-size:9px;color:rgba(60,60,67,.55)';s.innerHTML=`<span style="width:7px;height:7px;border-radius:2px;background:${'#007AFF #34C759 #FF9500'.split(' ')[i]};flex-shrink:0"></span>${l} (${[13,45,42][i]}%)`;dl.appendChild(s);});
-rem('c6',{type:'doughnut',data:{labels:['Doctors','Clinical','Non-clinical'],datasets:[{data:[157,530,497],backgroundColor:['#007AFF','#34C759','#FF9500'],borderWidth:2,borderColor:'#fff',datalabels:{color:'#fff',font:{size:9,weight:'700'},formatter:v=>v+'\n'+Math.round(v/1184*100)+'%',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'50%',plugins:{legend:{display:false},datalabels:{display:true}}}});
-const t10b=document.getElementById('t10body');
-TOP10.forEach((r,i)=>{const bw=Math.round(r.sal/107*75);t10b.innerHTML+=`<tr><td><span class="rb" style="background:${r.c};">${i+1}</span></td><td style="font-weight:600;">${r.d}</td><td><span style="display:inline-block;width:${bw}px;height:7px;background:${r.c};border-radius:3px;margin-right:4px;vertical-align:middle;"></span><b style="color:${r.c};">৳${r.sal}M</b></td><td style="text-align:center;"><span class="pill-lbl" style="background:${r.c}18;color:${r.c};border:1px solid ${r.c}44;">${r.hc}</span></td></tr>`;});
-rem('cTop10',{type:'bar',data:{labels:TOP10.map(r=>r.d),datasets:[{data:TOP10.map(r=>r.sal),backgroundColor:TOP10.map(r=>r.c),borderRadius:4,yAxisID:'y',datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.6)',font:{size:8,weight:'600'},formatter:v=>'৳'+v+'M'}},{data:TOP10.map(r=>r.hc),backgroundColor:TOP10.map(r=>r.c+'55'),borderRadius:4,yAxisID:'y2',datalabels:{display:false}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:8,color:'rgba(60,60,67,.55)'}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:{...BT,maxRotation:35}},y:{grid:BG,ticks:{...BT,callback:v=>'৳'+v+'M'},position:'left'},y2:{grid:{display:false},ticks:BT,position:'right'}}}});
-const gc=document.getElementById('growthCards');
-GROWTH.forEach(g=>{const pct=g.jan>0?((g.gain/g.jan)*100).toFixed(1):'-';gc.innerHTML+=`<div class="growth-card" style="background:${g.c}12;border-color:${g.c}44;"><div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><span style="font-size:13px;font-weight:700;color:${g.c};">▲${g.gain}</span><span style="font-size:10px;font-weight:700;color:var(--lbl);">${g.d}</span></div><div style="font-size:8px;color:var(--lbl2);">${g.jan}→${g.dec}${pct!=='-'?' ('+pct+'%)':' (new)'}</div><div class="g-bar"><div class="g-fill" style="width:${Math.min(g.gain/15*100,100)}%;background:${g.c};"></div></div></div>`;});
-
-let deptType='line',curH='main',state={cat:'all',loc:'all',hl:'none'};
-function getRange(){let f=parseInt(document.getElementById('gFrom').value),t=parseInt(document.getElementById('gTo').value);if(t<f)t=f;return{f,t};}
-
-/* ★ DEPT CHART — uses full DEPT_DATA */
-function buildDeptChart(){
-  const dept=document.getElementById('deptSel').value;
-  const{f,t}=getRange();
-  const rawData=DEPT_DATA[dept]||Array(12).fill(0);
-  const d=rawData.slice(f,t+1);
-  const labels=MO.slice(f,t+1);
-  const mV=Math.max(...d);
-  const minV=Math.min(...d.filter(v=>v>0));
-  rem('cDeptHC',{type:deptType,data:{labels,datasets:[{data:d,backgroundColor:deptType==='bar'?d.map(v=>v===mV&&v>0?'#007AFF':v>0?'rgba(0,122,255,.35)':'rgba(0,0,0,.06)'):'rgba(0,122,255,.09)',borderColor:'#007AFF',borderRadius:deptType==='bar'?4:0,tension:.4,pointRadius:3,borderWidth:2,fill:deptType==='line',datalabels:{anchor:'end',align:'end',color:ctx=>ctx.dataset.data[ctx.dataIndex]===mV&&mV>0?'#007AFF':'rgba(60,60,67,.55)',font:{size:8,weight:ctx=>ctx.dataset.data[ctx.dataIndex]===mV&&mV>0?'700':'500'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT,min:0}}}});
-}
-function setDT(t,btn){deptType=t;document.querySelectorAll('#dtLine,#dtBar').forEach(b=>b.classList.remove('on-g'));btn.classList.add('on-g');buildDeptChart();}
-
-function buildHospChart(){const h=HOSP[curH];const{f,t}=getRange();const hcD=h.hc.slice(f,t+1);const salD=h.sal.slice(f,t+1);const labels=MO.slice(f,t+1);const mH=Math.max(...hcD);rem('cHospMain',{type:'bar',data:{labels,datasets:[{type:'bar',data:hcD,backgroundColor:hcD.map(v=>v===mH?'#32ADE6':'rgba(50,173,230,.3)'),borderRadius:4,yAxisID:'y',label:'HC',datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.65)',font:{size:8,weight:'700'},formatter:v=>v===0?'':v}},{type:'line',data:salD,borderColor:'#FF9500',backgroundColor:'rgba(255,149,0,.07)',tension:.4,pointRadius:3,borderWidth:2,fill:true,yAxisID:'y2',label:'Salary',datalabels:{anchor:'end',align:'top',color:'#C56600',font:{size:8,weight:'700'},formatter:v=>v>0?'৳'+v.toFixed(2)+'M':''}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT,position:'left'},y2:{grid:{display:false},ticks:{...BT,callback:v=>v>0?'৳'+v.toFixed(1)+'M':''},position:'right'}}}});}
-function setHosp(btn){document.querySelectorAll('[data-h]').forEach(b=>b.classList.remove('on-t'));btn.classList.add('on-t');curH=btn.dataset.h;buildHospChart();}
-function buildHospAll(){const{f,t}=getRange();const labels=MO.slice(f,t+1);const keys=['main','barishal','jamalpur','naogaon','kulaura','ispahani'];const colors=['#007AFF','#34C759','#FF9500','#AF52DE','#FF2D55','#FF3B30'];rem('cHospAll',{type:'line',data:{labels,datasets:keys.map((k,i)=>({label:HOSP[k].label,data:HOSP[k].hc.slice(f,t+1),borderColor:colors[i],tension:.4,pointRadius:3,borderWidth:2,fill:false,datalabels:{anchor:'end',align:i%2===0?'top':'bottom',color:colors[i],font:{size:8,weight:'700'},formatter:v=>v===0?'':v}}))},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18,bottom:18,right:8,left:4}},interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{color:'rgba(60,60,67,.55)',font:{size:9},boxWidth:8,padding:7}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT}}}});}
-
-function buildAll(){
-  const{f,t}=getRange();const labels=MO.slice(f,t+1);const others=allO.slice(f,t+1);const gv=GV.slice(f,t+1);
-  const tHC=others.map(o=>o.total),jD=others.map(o=>o.join),sD=others.map(o=>o.sep),toD=others.map(o=>o.to),lD=others.map(o=>o.leave),gD=others.map(o=>o.gross);
-  const cL=labels.slice(1),cD=gv.slice(1).map((v,i)=>+((v-gv[i])/1e6).toFixed(2));
-  document.getElementById('sc-hc').textContent=others[others.length-1].total.toLocaleString();
-  document.getElementById('sc-sal').textContent='৳'+(others.reduce((a,b)=>a+b.gross,0)/others.length).toFixed(1)+'M';
-  document.getElementById('sc-join').textContent=others.reduce((a,b)=>a+b.join,0);
-  document.getElementById('sc-join-sub').textContent='vs '+others.reduce((a,b)=>a+b.sep,0)+' separations';
-  document.getElementById('sc-to').textContent=(others.reduce((a,b)=>a+b.to,0)).toFixed(2)+'%';
-  const h1=tHC[0],hN=tHC[tHC.length-1],s1=gD[0],sN=gD[gD.length-1];
-  const hT=+((hN-h1)/h1*100).toFixed(1),sT=+((sN-s1)/s1*100).toFixed(1),gap=+(sT-hT).toFixed(1);
-  document.getElementById('ins-hc').textContent=(hT>=0?'+':'')+hT+'%';
-  document.getElementById('ins-sal').textContent=(sT>=0?'+':'')+sT+'%';
-  document.getElementById('ins-gap').textContent=(gap>=0?'+':'')+gap+'pp';
-  document.getElementById('ins-gap-sub').textContent=gap>0?'Salary grew faster':gap<0?'HC grew faster':'Equal';
-  document.getElementById('ins-pc').textContent=(+((sN/hN-s1/h1)/(s1/h1)*100).toFixed(1))+'%';
-  const hP=tHC.map((v,i)=>i===0?0:+((v-tHC[i-1])/tHC[i-1]*100).toFixed(2));
-  const sP=gD.map((v,i)=>i===0?0:+((v-gD[i-1])/gD[i-1]*100).toFixed(2));
-  rem('cHcSal',{type:'line',data:{labels,datasets:[{data:hP,borderColor:'#007AFF',backgroundColor:'rgba(0,122,255,.07)',tension:.4,pointRadius:3,borderWidth:2,fill:true,datalabels:{align:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'top':'bottom',anchor:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',color:'#007AFF',font:{size:8,weight:'600'},formatter:v=>v===0?'Base':(v>=0?'+':'')+v.toFixed(2)+'%'}},{data:sP,borderColor:'#34C759',backgroundColor:'rgba(52,199,89,.07)',tension:.4,pointRadius:3,borderWidth:2,fill:true,datalabels:{align:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'top':'bottom',anchor:ctx=>ctx.dataset.data[ctx.dataIndex]>=0?'end':'start',color:'#248A3D',font:{size:8,weight:'600'},formatter:v=>v===0?'Base':(v>=0?'+':'')+v.toFixed(2)+'%'}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20,bottom:4}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:{...BT,callback:v=>(v>=0?'+':'')+v.toFixed(1)+'%'},border:{dash:[4,4]}}}}});
-  const fHC=cat=>{if(state.cat!=='all'&&state.cat!==cat)return null;if(state.loc==='main')return SD[cat].main.slice(f,t+1);if(state.loc==='branch')return SD[cat].branch.slice(f,t+1);return allHC[cat].slice(f,t+1);};
-  const ds1=[];const cc={Doctors:{c:'#007AFF'},Clinical:{c:'#34C759'},Nonclinical:{c:'#FF9500'}};
-  Object.entries(cc).forEach(([cat,{c}])=>{const d=fHC(cat);if(!d)return;ds1.push({data:d,borderColor:c,tension:.4,pointRadius:3,borderWidth:2,fill:false,datalabels:{align:'top',anchor:'end',color:c,font:{size:8,weight:'600'},formatter:v=>v}});});
-  if(state.cat==='all')ds1.push({data:tHC,borderColor:'#AF52DE',tension:.4,pointRadius:3,borderWidth:2,borderDash:[5,3],fill:false,datalabels:{align:'top',anchor:'end',color:'#7B2FA7',font:{size:8,weight:'600'},formatter:v=>v}});
-  rem('c1',{type:'line',data:{labels,datasets:ds1},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18,right:8,bottom:4,left:4}},plugins:{legend:{display:false},datalabels:{display:true}},scales:BS}});
-  const sB=state.hl==='peak'?gD.map(v=>v===Math.max(...gD)?'#FF3B30':v>64?'#007AFF':'#32ADE6'):gD.map(v=>v>64?'#007AFF':'#32ADE6');
-  rem('c2',{type:'bar',data:{labels,datasets:[{data:gD,backgroundColor:sB,borderRadius:4,datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.6)',font:{size:8,weight:'600'},formatter:v=>'৳'+v.toFixed(1)}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:{...BT,callback:v=>'৳'+v+'M'},min:59,max:69}}}});
-  if(cD.length>0)rem('c8',{type:'bar',data:{labels:cL,datasets:[{data:cD,backgroundColor:cD.map(v=>v>=0?'#34C759':'#FF3B30'),borderRadius:4,datalabels:{anchor:'end',align:ctx=>cD[ctx.dataIndex]>=0?'end':'start',color:ctx=>cD[ctx.dataIndex]>=0?'#248A3D':'#FF3B30',font:{size:8,weight:'600'},formatter:v=>(v>=0?'+':'')+v.toFixed(2)+'M'}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20,bottom:5}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:{...BT,callback:v=>(v>=0?'+':'')+v.toFixed(1)+'M'}}}}});
-  rem('c3',{type:'bar',data:{labels,datasets:[{data:jD,backgroundColor:state.hl==='peak'?jD.map(v=>v===Math.max(...jD)?'#FF9500':'#34C759'):jD.map(()=>'#34C759'),borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#248A3D',font:{size:8,weight:'600'},formatter:v=>v===0?'':v}},{data:sD,backgroundColor:state.hl==='peak'?sD.map(v=>v===Math.max(...sD)?'#FF9500':'#FF3B30'):sD.map(()=>'#FF3B30'),borderRadius:4,datalabels:{anchor:'end',align:'end',color:'#FF3B30',font:{size:8,weight:'600'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{display:false},datalabels:{display:true}},scales:BS}});
-  const tB=toD.map(v=>state.hl==='peak'&&v===Math.max(...toD)?'#FF3B30':v>=1?'#FF3B30':'#FF9500');
-  rem('c4',{type:'line',data:{labels,datasets:[{data:toD,borderColor:'#FF9500',backgroundColor:'rgba(255,149,0,.07)',tension:.4,fill:true,borderWidth:2,pointBackgroundColor:tB,pointRadius:toD.map(v=>v>=1?5:3),datalabels:{anchor:'end',align:'top',color:ctx=>ctx.dataset.data[ctx.dataIndex]>=1?'#FF3B30':'#C56600',font:{size:8,weight:'600'},formatter:v=>v.toFixed(2)+'%'}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:{...BT,callback:v=>v+'%'},min:0,max:1.3}}}});
-  const lM=Math.max(...lD),lm=Math.min(...lD);
-  rem('c7',{type:'bar',data:{labels,datasets:[{data:lD,backgroundColor:lD.map(v=>{if(state.hl==='peak'&&v===lM)return'#FF3B30';if(state.hl==='drop'&&v===lm)return'#FF9500';return v===lM?'#5856D6':v===lm?'#FF3B30':'#32ADE6';}),borderRadius:4,datalabels:{anchor:'end',align:'end',color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v===lM?'#5856D6':v===lm?'#FF3B30':'rgba(60,60,67,.6)';},font:{size:8,weight:'600'},formatter:v=>v.toLocaleString()}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:BT},y:{grid:BG,ticks:BT,min:400}}}});
-  buildDeptChart();buildHospChart();buildHospAll();
-}
-let sc=null;
-function buildSplit(cat){if(sc)sc.destroy();const{f,t}=getRange();const labels=MO.slice(f,t+1);const md=state.loc==='branch'?SD[cat].main.slice(f,t+1).map(()=>0):SD[cat].main.slice(f,t+1);const bd=state.loc==='main'?SD[cat].branch.slice(f,t+1).map(()=>0):SD[cat].branch.slice(f,t+1);sc=new Chart(document.getElementById('c5'),{type:'bar',data:{labels,datasets:[{data:md,backgroundColor:'#007AFF',borderRadius:4,datalabels:{anchor:'center',align:'center',color:'#fff',font:{size:8,weight:'600'},formatter:v=>v===0?'':v}},{data:bd,backgroundColor:'#32ADE6',borderRadius:4,datalabels:{anchor:'center',align:'center',color:'#fff',font:{size:8,weight:'600'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:6}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{stacked:true,grid:{display:false},ticks:BT},y:{stacked:true,grid:BG,ticks:BT}}}});}
-function switchSplit(cat,btn){document.querySelectorAll('[onclick^="switchSplit"]').forEach(b=>b.classList.remove('on-g'));btn.classList.add('on-g');buildSplit(cat);}
-function applyAll(){let{f,t}=getRange();if(t<f)document.getElementById('gTo').value=f;buildAll();const at=document.querySelector('[onclick^="switchSplit"].on-g');buildSplit(at?at.textContent.includes('Doctor')?'Doctors':at.textContent.includes('Clinical')?'Clinical':'Nonclinical':'Doctors');}
-function setCat(v,btn){document.querySelectorAll('[data-cat]').forEach(b=>b.classList.remove('on-g','on-b','on-o','on-p'));btn.classList.add('on-g');state.cat=v;applyAll();}
-function setLoc(v,btn){document.querySelectorAll('[data-loc]').forEach(b=>b.classList.remove('on-g','on-b','on-o','on-p'));btn.classList.add('on-o');state.loc=v;applyAll();}
-function setHl(v,btn){document.querySelectorAll('[data-hl]').forEach(b=>b.classList.remove('on-g','on-b','on-o','on-p'));btn.classList.add('on-p');state.hl=v;applyAll();}
-
-/* POPUP */
-const HMETA={
-  recOverview:{title:'Recruitment overview — 2025',sub:'151 total hires · Jan–Dec',color:'#34C759',insight:'<strong>151 total hires</strong>. August peaked with 30. Dhaka drove 80.8% (122). Replacement hiring dominated every month.',leg:[{c:'#007AFF',l:'Dhaka'},{c:'#32ADE6',l:'Branch'}]},
-  recMonthly:{title:'Month-wise total recruitment',sub:'All hires per month with location slicer',color:'#007AFF',insight:'Monthly totals show clear seasonality. Q3 peaks in August. Use the Dhaka/Branch slicer to isolate location trends.',leg:[{c:'#007AFF',l:'Dhaka'},{c:'#32ADE6',l:'Branch'}]},
-  recDhakaBranch:{title:'Dhaka vs Branch — monthly hires',sub:'Location split with data labels',color:'#32ADE6',insight:'Dhaka drove <strong>122 of 151 hires (80.8%)</strong>. Branch recruitment concentrated in Jan (2), Mar (4), Jun (6), Aug (7).',leg:[{c:'#007AFF',l:'Dhaka (122)'},{c:'#32ADE6',l:'Branch (29)'}]},
-  recReplaceNew:{title:'Replace vs new hire — monthly',sub:'All locations combined',color:'#AF52DE',insight:'<strong>107 replacement hires (70.9%)</strong> vs 44 new positions (29.1%).',leg:[{c:'#FF9500',l:'Replacement (107)'},{c:'#AF52DE',l:'New positions (44)'}]},
-  hcTrend:{title:'Headcount trend by category',sub:'Monthly · Jan–Dec 2025',color:'#007AFF',insight:'Total HC grew from <strong>1,125 to 1,184 (+5.2%)</strong>. Clinical support drove the most growth (+45).',leg:[{c:'#007AFF',l:'Doctors'},{c:'#34C759',l:'Clinical'},{c:'#FF9500',l:'Non-clinical'},{c:'#AF52DE',l:'Total'}]},
-  staffMix:{title:'Staff mix – December 2025',sub:'Headcount share by category',color:'#FF9500',insight:'Clinical support largest (44.8%), Non-clinical (42.0%), Doctors (13.3%).',leg:[{c:'#007AFF',l:'Doctors'},{c:'#34C759',l:'Clinical'},{c:'#FF9500',l:'Non-clinical'}]},
-  hcSal:{title:'HC% vs Salary% growth',sub:'Month-on-month % change',color:'#5856D6',insight:'Salary outpaced HC after July. <strong>3.35pp gap</strong> across the year.',leg:[{c:'#007AFF',l:'HC %'},{c:'#34C759',l:'Salary %'}]},
-  salaryBill:{title:'Monthly salary',sub:'Total gross payroll per month (৳M)',color:'#32ADE6',insight:'Payroll jumped <strong>+৳4M in July</strong>. H2 averaged <strong>৳66.2M/month</strong> vs ৳61.3M in H1.',leg:[{c:'#007AFF',l:'Jul–Dec'},{c:'#32ADE6',l:'Jan–Jun'}]},
-  salaryChange:{title:'Monthly salary change trend',sub:'Month-on-month Δ',color:'#34C759',insight:'July: <strong>+৳3.96M</strong> — the single largest monthly jump.',leg:[{c:'#34C759',l:'Increase'},{c:'#FF3B30',l:'Decrease'}]},
-  payrollShare:{title:'Annual payroll share by category',sub:'৳766.1M total',color:'#AF52DE',insight:'Doctors: <strong>43.5%</strong> of payroll, 13.4% of headcount — a <strong>3.2× cost multiplier</strong>.',leg:[{c:'#007AFF',l:'Doctors'},{c:'#34C759',l:'Clinical'},{c:'#FF9500',l:'Non-clinical'}]},
-  hospSal:{title:'Hospital-wise annual salary',sub:'৳M · 2025',color:'#32ADE6',insight:'Main Hospital accounts for <strong>৳634.3M (82.8%)</strong> of total payroll.',leg:[{c:'#007AFF',l:'Main'},{c:'#34C759',l:'Barishal'},{c:'#FF9500',l:'Jamalpur'},{c:'#AF52DE',l:'Naogaon'},{c:'#FF2D55',l:'Kulaura'},{c:'#FF3B30',l:'Ispahani'}]},
-  joinSep:{title:'Joinings vs separations',sub:'Monthly movement',color:'#FF3B30',insight:'Net gain <strong>+67</strong> (151 joinings, 84 separations). August peaked.',leg:[{c:'#34C759',l:'Joined'},{c:'#FF3B30',l:'Separated'}]},
-  turnover:{title:'Monthly turnover %',sub:'Separations ÷ HC × 100',color:'#FF9500',insight:'Annual turnover <strong>7.3%</strong>. Only August exceeded 1% (1.03%).',leg:[{c:'#FF9500',l:'Turnover %'},{c:'#FF3B30',l:'≥1% peak'}]},
-  leave:{title:'Monthwise leave applications',sub:'9,858 total annual',color:'#5856D6',insight:'Leave spiked in <strong>July (1,029)</strong>. March was lowest (531). December peaked at 1,087.',leg:[{c:'#5856D6',l:'Peak'},{c:'#FF3B30',l:'Lowest'},{c:'#32ADE6',l:'Regular'}]},
-  sepMode:{title:'Separation mode',sub:'84 total separations',color:'#FF3B30',insight:'<strong>72.6% resignations</strong>. Misconduct 13.1%. Training end 10.7%.',leg:[{c:'#FF3B30',l:'Resignation'},{c:'#FF9500',l:'Misconduct'},{c:'#32ADE6',l:'Training end'},{c:'#8E8E93',l:'Retirement'},{c:'#5856D6',l:'Death'}]},
-  top10:{title:'Top 10 departments by salary',sub:'Salary + avg HC',color:'#FF9500',insight:'Cornea: highest salary-per-head at <strong>৳3M per person/year</strong>.',leg:[{c:'#007AFF',l:'Salary (৳M)'},{c:'#FF9500',l:'Avg HC'}]},
-  growth5:{title:'Top 5 fastest growing depts',sub:'HC change Jan→Dec',color:'#34C759',insight:'IIEC-1 is a new unit starting from zero (15 staff by Dec). NSS added 13 organically.',leg:[{c:'#007AFF',l:'IIEC-1 (+15)'},{c:'#34C759',l:'NSS (+13)'},{c:'#FF9500',l:'BBH (+8)'},{c:'#AF52DE',l:'OSS (+5)'},{c:'#FF2D55',l:'JBH (+5)'}]},
-  hospAllHC:{title:'All hospitals — HC overlay',sub:'HC labels on every point',color:'#007AFF',insight:'Main Hospital drives the overall trajectory. Ispahani IIEC data from August 2025.',leg:[{c:'#007AFF',l:'Main'},{c:'#34C759',l:'Barishal'},{c:'#FF9500',l:'Jamalpur'},{c:'#AF52DE',l:'Naogaon'},{c:'#FF2D55',l:'Kulaura'},{c:'#FF3B30',l:'Ispahani'}]},
-  genderRatio:{title:'Male / Female ratio',sub:'1,184 staff',color:'#FF2D55',insight:'Near-perfectly balanced: <strong>50.3% male / 49.7% female</strong>.',leg:[{c:'#007AFF',l:'Male (595)'},{c:'#FF2D55',l:'Female (589)'}]},
-  genderCat:{title:'Gender by category',sub:'Male vs Female',color:'#FF2D55',insight:'Clinical <strong>76.1% female</strong>. Non-clinical <strong>73.9% male</strong>. Doctors 57.2% male.',leg:[{c:'#007AFF',l:'Male'},{c:'#FF2D55',l:'Female'}]},
-};
-let popC=null;
-function openPop(key,btn){
-  const m=HMETA[key];if(!m)return;
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');
-  document.getElementById('popTitle').textContent=m.title;
-  document.getElementById('popSub').textContent=m.sub;
-  document.getElementById('popAccent').style.background=m.color;
-  document.getElementById('popInsight').innerHTML=m.insight;
-  const leg=document.getElementById('popLeg');leg.innerHTML='';
-  m.leg.forEach(li=>{leg.innerHTML+=`<span><span class="pop-ld" style="background:${li.c};"></span>${li.l}</span>`;});
-  document.getElementById('overlay').classList.add('show');
-  if(popC){popC.destroy();popC=null;}
-  setTimeout(()=>{
-    const ctx=document.getElementById('popChart');
-    const{f,t}=getRange();const others=allO.slice(f,t+1);const labels=MO.slice(f,t+1);const gv=GV.slice(f,t+1);
-    const PT={font:{size:10},autoSkip:false,maxRotation:0,color:'rgba(60,60,67,.5)'};const PG={color:'rgba(60,60,67,.07)'};
-    const tHC=others.map(o=>o.total);const grossD=others.map(o=>o.gross);
-    const joinD=others.map(o=>o.join);const sepD=others.map(o=>o.sep);const toD=others.map(o=>o.to);const leaveD=others.map(o=>o.leave);
-    const rl=recLabels.slice(f,t+1);
-    const cfgs={
-      recOverview:()=>({type:'bar',data:{labels:rl,datasets:[{label:'Dhaka',data:RD.slice(f,t+1).map(r=>r.dl+r.dn),backgroundColor:'#007AFF',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#007AFF',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}},{label:'Branch',data:RD.slice(f,t+1).map(r=>r.bl+r.bn),backgroundColor:'#32ADE6',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#0a5a8a',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT}}}}),
-      recMonthly:()=>({type:'bar',data:{labels:rl,datasets:[{label:'Dhaka',data:RD.slice(f,t+1).map(r=>r.dl+r.dn),backgroundColor:'#007AFF',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#007AFF',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}},{label:'Branch',data:RD.slice(f,t+1).map(r=>r.bl+r.bn),backgroundColor:'#32ADE6',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#0a5a8a',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT}}}}),
-      recDhakaBranch:()=>({type:'line',data:{labels:rl,datasets:[{data:RD.slice(f,t+1).map(r=>r.dl+r.dn),borderColor:'#007AFF',backgroundColor:'rgba(0,122,255,.08)',tension:.4,pointRadius:4,borderWidth:2.5,fill:true,label:'Dhaka',datalabels:{anchor:'end',align:'top',color:'#007AFF',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}},{data:RD.slice(f,t+1).map(r=>r.bl+r.bn),borderColor:'#32ADE6',backgroundColor:'rgba(50,173,230,.08)',tension:.4,pointRadius:4,borderWidth:2.5,fill:true,label:'Branch',datalabels:{anchor:'end',align:'bottom',color:'#0a5a8a',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22,bottom:12}},interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT,min:0}}}}),
-      recReplaceNew:()=>({type:'bar',data:{labels:rl,datasets:[{data:replaceAll.slice(f,t+1),backgroundColor:'#FF9500',borderRadius:5,label:'Replace',datalabels:{anchor:'end',align:'end',color:'#C56600',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}},{data:newAll.slice(f,t+1),backgroundColor:'#AF52DE',borderRadius:5,label:'New',datalabels:{anchor:'end',align:'end',color:'#7B2FA7',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22}},interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT}}}}),
-      hcTrend:()=>({type:'line',data:{labels,datasets:[{data:allHC.Doctors.slice(f,t+1),borderColor:'#007AFF',tension:.4,pointRadius:4,borderWidth:2.5,fill:false,datalabels:{display:false}},{data:allHC.Clinical.slice(f,t+1),borderColor:'#34C759',tension:.4,pointRadius:4,borderWidth:2.5,fill:false,datalabels:{display:false}},{data:allHC.Nonclinical.slice(f,t+1),borderColor:'#FF9500',tension:.4,pointRadius:4,borderWidth:2.5,fill:false,datalabels:{display:false}},{data:tHC,borderColor:'#AF52DE',tension:.4,pointRadius:4,borderWidth:2.5,borderDash:[6,3],fill:false,datalabels:{anchor:'end',align:'top',color:'#7B2FA7',font:{size:9,weight:'700'},formatter:v=>v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT}}}}),
-      staffMix:()=>({type:'doughnut',data:{labels:['Doctors','Clinical','Non-clinical'],datasets:[{data:[157,530,497],backgroundColor:['#007AFF','#34C759','#FF9500'],borderWidth:2.5,borderColor:'#fff',datalabels:{color:'#fff',font:{size:11,weight:'700'},formatter:v=>v+'\n'+Math.round(v/1184*100)+'%',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'50%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}}}}),
-      hcSal:()=>{const hp=tHC.map((v,i)=>i===0?0:+((v-tHC[i-1])/tHC[i-1]*100).toFixed(2));const sp=grossD.map((v,i)=>i===0?0:+((v-grossD[i-1])/grossD[i-1]*100).toFixed(2));return{type:'line',data:{labels,datasets:[{data:hp,borderColor:'#007AFF',backgroundColor:'rgba(0,122,255,.07)',tension:.4,pointRadius:4,borderWidth:2.5,fill:true,datalabels:{align:'top',anchor:'end',color:'#007AFF',font:{size:9,weight:'700'},formatter:v=>v===0?'Base':(v>=0?'+':'')+v.toFixed(2)+'%'}},{data:sp,borderColor:'#34C759',backgroundColor:'rgba(52,199,89,.07)',tension:.4,pointRadius:4,borderWidth:2.5,fill:true,datalabels:{align:'bottom',anchor:'start',color:'#248A3D',font:{size:9,weight:'700'},formatter:v=>v===0?'Base':(v>=0?'+':'')+v.toFixed(2)+'%'}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24,bottom:16}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:{...PT,callback:v=>(v>=0?'+':'')+v.toFixed(1)+'%'}}}}};},
-      salaryBill:()=>({type:'bar',data:{labels,datasets:[{data:grossD,backgroundColor:grossD.map(v=>v>64?'#007AFF':'#32ADE6'),borderRadius:5,datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.7)',font:{size:9,weight:'700'},formatter:v=>'৳'+v.toFixed(1)}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:{...PT,callback:v=>'৳'+v+'M'},min:59,max:69}}}}),
-      salaryChange:()=>{const cl=labels.slice(1);const cd=gv.slice(1).map((v,i)=>+((v-gv[i])/1e6).toFixed(2));return{type:'bar',data:{labels:cl,datasets:[{data:cd,backgroundColor:cd.map(v=>v>=0?'#34C759':'#FF3B30'),borderRadius:5,datalabels:{anchor:'end',align:ctx=>cd[ctx.dataIndex]>=0?'end':'start',color:ctx=>cd[ctx.dataIndex]>=0?'#248A3D':'#FF3B30',font:{size:9,weight:'700'},formatter:v=>(v>=0?'+':'')+v.toFixed(2)+'M'}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24,bottom:10}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:{...PT,callback:v=>(v>=0?'+':'')+v.toFixed(1)+'M'}}}}};},
-      payrollShare:()=>({type:'doughnut',data:{labels:['Doctors','Clinical','Non-clinical'],datasets:[{data:[333285863,218396864,214436864],backgroundColor:['#007AFF','#34C759','#FF9500'],borderWidth:2.5,borderColor:'#fff',datalabels:{color:'#fff',font:{size:11,weight:'700'},formatter:v=>'৳'+(v/1e6).toFixed(0)+'M\n'+(v/766118864*100).toFixed(1)+'%',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'46%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}}}}),
-      hospSal:()=>({type:'bar',data:{labels:['Main Hospital','Barishal','Jamalpur','Naogaon','Kulaura','Ispahani'],datasets:[{data:[634.3,50.9,37.2,33.6,7.6,1.9],backgroundColor:['#007AFF','#34C759','#FF9500','#AF52DE','#FF2D55','#FF3B30'],borderRadius:6,datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.7)',font:{size:10,weight:'700'},formatter:v=>'৳'+v+'M'}}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:65}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:PG,ticks:{...PT,callback:v=>'৳'+v+'M'}},y:{grid:{display:false},ticks:{...PT,font:{size:11}}}}}}),
-      joinSep:()=>({type:'bar',data:{labels,datasets:[{data:joinD,backgroundColor:'#34C759',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#248A3D',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}},{data:sepD,backgroundColor:'#FF3B30',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#FF3B30',font:{size:9,weight:'700'},formatter:v=>v===0?'':v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22}},interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT}}}}),
-      turnover:()=>({type:'line',data:{labels,datasets:[{data:toD,borderColor:'#FF9500',backgroundColor:'rgba(255,149,0,.09)',tension:.4,fill:true,borderWidth:2.5,pointBackgroundColor:toD.map(v=>v>=1?'#FF3B30':'#FF9500'),pointRadius:toD.map(v=>v>=1?7:4),datalabels:{anchor:'end',align:'top',color:ctx=>ctx.dataset.data[ctx.dataIndex]>=1?'#FF3B30':'#C56600',font:{size:9,weight:'700'},formatter:v=>v.toFixed(2)+'%'}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:{...PT,callback:v=>v+'%'},min:0,max:1.3}}}}),
-      leave:()=>{const lM=Math.max(...leaveD),lm=Math.min(...leaveD);return{type:'bar',data:{labels,datasets:[{data:leaveD,backgroundColor:leaveD.map(v=>v===lM?'#5856D6':v===lm?'#FF3B30':'#32ADE6'),borderRadius:5,datalabels:{anchor:'end',align:'end',color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v===lM?'#5856D6':v===lm?'#FF3B30':'rgba(60,60,67,.6)';},font:{size:9,weight:'700'},formatter:v=>v.toLocaleString()}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT,min:400}}}};},
-      sepMode:()=>({type:'doughnut',data:{labels:['Resignation','Misconduct','End Training','Retirement','Death'],datasets:[{data:[61,11,9,2,1],backgroundColor:['#FF3B30','#FF9500','#32ADE6','#8E8E93','#5856D6'],borderWidth:2.5,borderColor:'#fff',datalabels:{color:'#fff',font:{size:11,weight:'700'},formatter:v=>v+'\n'+(v/84*100).toFixed(1)+'%',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'48%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}}}}),
-      top10:()=>({type:'bar',data:{labels:TOP10.map(r=>r.d),datasets:[{data:TOP10.map(r=>r.sal),backgroundColor:TOP10.map(r=>r.c),borderRadius:5,yAxisID:'y',datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.7)',font:{size:9,weight:'700'},formatter:v=>'৳'+v+'M'}},{data:TOP10.map(r=>r.hc),backgroundColor:TOP10.map(r=>r.c+'66'),borderRadius:5,yAxisID:'y2',datalabels:{display:false}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:{...PT,maxRotation:35}},y:{grid:PG,ticks:{...PT,callback:v=>'৳'+v+'M'},position:'left'},y2:{grid:{display:false},ticks:PT,position:'right'}}}}),
-      growth5:()=>({type:'bar',data:{labels:GROWTH.map(g=>g.d),datasets:[{data:GROWTH.map(g=>g.gain),backgroundColor:GROWTH.map(g=>g.c),borderRadius:8,datalabels:{anchor:'end',align:'end',color:'rgba(60,60,67,.8)',font:{size:13,weight:'700'},formatter:v=>'+'+v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:34}},plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT,min:0,max:18}}}}),
-      hospAllHC:()=>({type:'line',data:{labels,datasets:['main','barishal','jamalpur','naogaon','kulaura','ispahani'].map((k,i)=>({label:HOSP[k].label,data:HOSP[k].hc.slice(f,t+1),borderColor:['#007AFF','#34C759','#FF9500','#AF52DE','#FF2D55','#FF3B30'][i],tension:.4,pointRadius:4,borderWidth:2.5,fill:false,datalabels:{anchor:'end',align:i%2===0?'top':'bottom',color:['#007AFF','#34C759','#FF9500','#AF52DE','#FF2D55','#FF3B30'][i],font:{size:9,weight:'700'},formatter:v=>v===0?'':v}}))},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18,bottom:18}},interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{color:'rgba(60,60,67,.55)',font:{size:10},boxWidth:10}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT}}}}),
-      genderRatio:()=>({type:'doughnut',data:{labels:['Male','Female'],datasets:[{data:[595,589],backgroundColor:['#007AFF','#FF2D55'],borderWidth:2.5,borderColor:'#fff',datalabels:{color:'#fff',font:{size:12,weight:'700'},formatter:v=>v+'\n'+(v/1184*100).toFixed(1)+'%',textAlign:'center',anchor:'center',align:'center'}}]},options:{responsive:true,maintainAspectRatio:false,cutout:'50%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}}}}),
-      genderCat:()=>({type:'bar',data:{labels:['Doctors','Clinical','Non-clinical','Total'],datasets:[{label:'Male',data:[91,121,383,595],backgroundColor:'#007AFF',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#007AFF',font:{size:10,weight:'700'},formatter:v=>v}},{label:'Female',data:[68,386,135,589],backgroundColor:'#FF2D55',borderRadius:5,datalabels:{anchor:'end',align:'end',color:'#FF2D55',font:{size:10,weight:'700'},formatter:v=>v}}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:26}},interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}},datalabels:{display:true}},scales:{x:{grid:{display:false},ticks:PT},y:{grid:PG,ticks:PT}}}}),
-    };
-    const fn=cfgs[key];if(fn)popC=new Chart(ctx,fn());
-  },60);
-}
-function closePop(){document.getElementById('overlay').classList.remove('show');if(popC){popC.destroy();popC=null;}}
-function closeOutside(e){if(e.target===document.getElementById('overlay'))closePop();}
-
-buildAll();buildSplit('Doctors');
 </script>
+</body>
+</html>
